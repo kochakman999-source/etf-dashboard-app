@@ -1,9 +1,9 @@
 // Replace these values with your Firebase Web App configuration.
 export const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT.firebaseapp.com",
-  projectId: "PASTE_PROJECT",
-  storageBucket: "PASTE_PROJECT.firebasestorage.app",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "你的Firebase apiKey",
+  authDomain: "etf-core-portfolio.firebaseapp.com",
+  projectId: "etf-core-portfolio",
+  storageBucket: "etf-core-portfolio.firebasestorage.app",
+  messagingSenderId: "你的messagingSenderId",
+  appId: "你的appId"
 };
