@@ -9,3 +9,5 @@ ETF Core Portfolio Ultimate
 7. 重新上載firebase-config.js後，手機及PC用同一Google帳戶登入。
 
 重要：不要把JSON備份或交易CSV上載Public GitHub。Firebase Web config可放前端，但Firestore安全規則必須正確發布。
+
+Ultimate 1.1新增：Buy-only再平衡金額及股數、碎股／整股模式、交易CSV、持倉CSV、深色模式、最後儲存時間。
