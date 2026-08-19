@@ -1,13 +1,8 @@
-ETF Core Portfolio Ultimate
+ETF Core Portfolio Ultimate 2.2 精簡完成版
 
-1. 先測試：把整個資料夾上載到GitHub Repository根目錄。index.html必須在根目錄。
-2. PWA：Safari開GitHub Pages網址，分享 > 加入主畫面。
-3. Firebase：建立Firebase Web App，啟用Authentication的Google provider，建立Cloud Firestore。
-4. 把Firebase Web App設定填入firebase-config.js。
-5. 把firestore.rules內容貼到Firestore Rules並發布。
-6. Authentication > Settings > Authorized domains 加入你的 github.io 網域。
-7. 重新上載firebase-config.js後，手機及PC用同一Google帳戶登入。
+更新：
+- 移除首頁「新增交易／更新價格／查看持倉／展示模式」快捷列。
+- 原有功能完全保留於左側／底部導覽、Portfolio更新市場按鈕及右上角隱藏金額。
+- 保留市場現價更新、52週位置、市場概覽、交易修改、Firebase同步、再平衡、CSV／JSON及深色模式。
 
-重要：不要把JSON備份或交易CSV上載Public GitHub。Firebase Web config可放前端，但Firestore安全規則必須正確發布。
-
-Ultimate 1.1新增：Buy-only再平衡金額及股數、碎股／整股模式、交易CSV、持倉CSV、深色模式、最後儲存時間。
+GitHub更新：只上載 index.html 及 service-worker.js，切勿覆蓋已設定的 firebase-config.js。
