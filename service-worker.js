@@ -1,5 +1,5 @@
-const CACHE_NAME = 'etf-core-portfolio-v6-6-stable';
-const APP_SHELL = ['./', './index.html', './README_FINAL.txt'];
+const CACHE_NAME = 'etf-core-portfolio-v6-6';
+const APP_SHELL = ['./', './index.html'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
