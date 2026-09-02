@@ -1,19 +1,13 @@
-ETF Core Portfolio v7.1 Mobile Layout + Cloud Final
+ETF Core Portfolio v7.2 Cloud Status Fixed
 Build: 2026-09-02
 
-Fixes
-- Rebuilt goal-card layout to prevent amount, progress, status and action overlap.
-- Goal amount uses 17px, wrapping and break-all.
-- Goal date uses compact 12px text.
-- Goal actions have a dedicated responsive row.
-- Removed the duplicate Mobile More > Cloud Sync entry. Cloud login remains in the top bar.
-- Rebuilt the Home HK$1M value row and USD secondary typography.
-- Firebase Auth now uses browserLocalPersistence, getRedirectResult and onAuthStateChanged.
-- Mobile/PWA uses redirect sign-in. Desktop uses popup sign-in.
+Cloud status fixes
+- Login no longer remains indefinitely at "正在同步".
+- Initial Firestore read has a 15-second status timeout.
+- Missing cloud document shows "已登入，等待首次上載".
+- Permission, unavailable and authentication errors are shown clearly.
+- Manual upload and download have independent working, success and failure states.
+- Local-save autosync uses "等候同步" then "正在上載雲端".
+- Google login uses popup directly inside the click handler.
 
-Firebase Console requirements
-- Enable Google provider.
-- Add the GitHub Pages host to Authorized domains.
-- Use authenticated, user-scoped Firestore rules.
-
-Upload all five files to the repository root. If an old version is cached, remove old site data or the installed PWA, then reload.
+Upload all five files to the GitHub Pages root. If the old version remains visible, remove old site data or installed PWA before reloading.
