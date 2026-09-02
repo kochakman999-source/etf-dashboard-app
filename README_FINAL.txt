@@ -1,15 +1,18 @@
-ETF Core Portfolio v7.5 FINAL VERIFIED
+ETF Core Portfolio v7.2 Cloud Status Fixed
+Build: 2026-09-02
 
-The ETF transaction form permanently includes:
-- Buy / Sell direction
-- Funding Source: External Funds or Deduct from Cash Fund
-- Cash Fund: USD or HKD
+Cloud status fixes
+- Login no longer remains indefinitely at "正在同步".
+- Initial Firestore read has a 15-second status timeout.
+- Missing cloud document shows "已登入，等待首次上載".
+- Permission, unavailable and authentication errors are shown clearly.
+- Manual upload and download have independent working, success and failure states.
+- Local-save autosync uses "等候同步" then "正在上載雲端".
+- Google login uses popup directly inside the click handler.
 
-Verified behaviors:
-- Deposit adds cash; withdrawal subtracts cash.
-- External-funds buy does not deduct cash.
-- USD/HKD Cash Fund buy creates a linked withdrawal.
-- Insufficient balance disables and blocks Save.
-- Sell, linked cash reversal, dividend cash linkage, goals and mobile safe-area remain present.
+Upload all five files to the GitHub Pages root. If the old version remains visible, remove old site data or installed PWA before reloading.
 
-IMPORTANT: Preserve your existing REAL firebase-config.js. The packaged file is a placeholder only.
+v7.1.1 cloud button only hotfix
+- Only the existing top Cloud Login button was changed.
+- Added a direct HTML onclick fallback, pointer/touch support and a higher header tap layer.
+- No ETF, cash, goals, market, calculations, Firebase configuration or cloud data logic was changed.
