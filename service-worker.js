@@ -1,4 +1,4 @@
-const CACHE_NAME='etf-core-v8-1-whole-app-final-20260902';
+const CACHE_NAME='etf-core-v8-2-complete-final-20260902';
 const APP=['./','./index.html','./cloud-sync.js','./firebase-config.js','./README_FINAL.txt'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))));self.clients.claim()});

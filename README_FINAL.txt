@@ -1,11 +1,12 @@
-ETF Core Portfolio v8.1 Whole App Final
+ETF Core Portfolio v8.2 Complete Final
 Build: 2026-09-02
 
-Mobile cloud login
-- The existing top Cloud Login button is always visible as a blue cloud button.
-- Direct onclick, click and pointerup fallbacks open the existing cloud modal.
-- No duplicate cloud entry is added.
+Header fix
+- Single 68px mobile header row.
+- Page title, privacy, theme and Cloud Login stay aligned horizontally.
+- Privacy and theme icons are visible, with no empty boxes.
+- Cloud Login opens the existing modal and Google sign-in uses popup directly from its click event.
 
-Whole-app verification covers all pages, navigation, overview, holdings, ETF buy/sell and guards, cash deposit/withdraw/exchange, linked cash refund, strategy, budgets, market and 52-week updates, snapshots, projections, performance, dividends, goals, backup/import/export, privacy, theme, Firebase configuration, cloud upload/download/autosync, mobile layout, service worker, ZIP integrity and local HTTP serving.
+Whole-app checks include all ten pages, ETF buy/sell and cash linkage, cash deposit/withdraw/exchange, strategy, budgets, market data, monthly snapshots, projection, performance, dividends, goals, import/export, privacy/theme, Firebase Auth, Firestore paths, service worker, JavaScript syntax, ZIP integrity and local HTTP serving.
 
-Note: automated checks can verify local code and logic. Actual Google/Firebase network authorization still depends on Firebase Console settings and internet access.
+Actual Google/Firebase authorization requires the GitHub Pages hostname in Firebase Authorized domains and suitable Firestore Security Rules.
