@@ -13,10 +13,13 @@ const downloadCloud = $('downloadCloud');
 const googleLogout = $('googleLogout');
 let auth = null;
 let db = null;
+let fs = null;
 let currentUser = null;
-let busy = false;
-let saveTimer = null;
-let suppress = false;
+let uploadTimer = null;
+let uploadInFlight = false;
+let pendingState = null;
+let applyingCloudState = false;
+let startupPullDoneForUid = '';
 
 function status(message, kind = 'idle') {
   if (syncText) syncText.textContent = message;
@@ -30,26 +33,33 @@ function userLabel(user) {
 
 function setAuthControls(signedIn) {
   if (googleLogin) googleLogin.style.display = signedIn ? 'none' : '';
-  [uploadCloud, downloadCloud, googleLogout].forEach(element => {
-    if (element) element.style.display = signedIn ? '' : 'none';
-  });
+  if (uploadCloud) uploadCloud.style.display = 'none';
+  if (downloadCloud) downloadCloud.style.display = 'none';
+  if (googleLogout) googleLogout.style.display = signedIn ? '' : 'none';
 }
 
-function updateAuthUI(user) {
-  currentUser = user || null;
-  const signedIn = Boolean(currentUser);
-  setAuthControls(signedIn);
-  if (!cloudButton) return;
-  if (!signedIn) {
-    cloudButton.textContent = '雲端登入';
-    cloudButton.title = '開啟雲端登入';
-    status('雲端同步：未登入', 'idle');
-    return;
-  }
-  const name = userLabel(currentUser);
-  cloudButton.textContent = name.length > 10 ? '已登入' : name;
-  cloudButton.title = name;
-  status(`已登入：${name}`, 'ok');
+function localState() {
+  return window.ETFProApp?.getState?.() || {};
+}
+
+function validTime(value) {
+  const time = Date.parse(value || '');
+  return Number.isFinite(time) ? time : 0;
+}
+
+function localUpdatedAt(state = localState()) {
+  return Math.max(validTime(state.lastSaved), validTime(state.lastCloudSync));
+}
+
+function cloudUpdatedAt(snapshot) {
+  const data = snapshot.data() || {};
+  const timestamp = data.updatedAt;
+  if (timestamp?.toMillis) return timestamp.toMillis();
+  return validTime(data.clientUpdatedAt || data.state?.lastSaved);
+}
+
+function cloudRef(user) {
+  return fs.doc(db, 'users', user.uid, 'portfolio', 'main');
 }
 
 function errorText(error, action) {
@@ -57,11 +67,12 @@ function errorText(error, action) {
   if (code.includes('popup-blocked')) return '登入視窗被封鎖，請允許彈出式視窗。';
   if (code.includes('popup-closed')) return '登入視窗已關閉。';
   if (code.includes('unauthorized-domain')) return '網站網域未加入 Firebase Authorized domains。';
-  if (code.includes('permission-denied')) return 'Firestore 權限被拒絕。';
+  if (code.includes('permission-denied')) return 'Firestore 權限被拒絕，請檢查 Security Rules。';
+  if (code.includes('unavailable') || code.includes('network-request-failed')) return `${action}失敗：網絡或 Firebase 暫時無法連線。`;
   return `${action}失敗：${error?.message || code || '未知錯誤'}`;
 }
 
-function timeout(promise, milliseconds = 15000) {
+function withTimeout(promise, milliseconds = 15000) {
   let timer;
   return Promise.race([
     promise,
@@ -71,23 +82,116 @@ function timeout(promise, milliseconds = 15000) {
   ]).finally(() => clearTimeout(timer));
 }
 
-function cloudRef(fsmod, user) {
-  return fsmod.doc(db, 'users', user.uid, 'portfolio', 'main');
+function applyDownloadedState(nextState) {
+  if (!nextState || typeof nextState !== 'object') throw new Error('雲端資料格式不正確。');
+  localStorage.setItem('ETF_CORE_PRO_V1_PRE_AUTO_CLOUD_DOWNLOAD', JSON.stringify(localState()));
+  applyingCloudState = true;
+  try {
+    const cleanState = JSON.parse(JSON.stringify(nextState));
+    cleanState.lastCloudSync = new Date().toISOString();
+    window.ETFProApp.setState(cleanState);
+  } finally {
+    applyingCloudState = false;
+  }
+}
+
+async function pushState(state, reason = '自動') {
+  if (!currentUser || !fs || !state) return;
+  pendingState = state;
+  if (uploadInFlight) return;
+  uploadInFlight = true;
+  try {
+    while (pendingState && currentUser) {
+      const next = pendingState;
+      pendingState = null;
+      status(`${reason}同步中...`, 'busy');
+      const clientUpdatedAt = next.lastSaved || new Date().toISOString();
+      await withTimeout(fs.setDoc(cloudRef(currentUser), {
+        state: next,
+        clientUpdatedAt,
+        updatedAt: fs.serverTimestamp()
+      }, { merge: true }));
+      status('同步狀態：🟢 已與雲端同步', 'ok');
+    }
+  } catch (error) {
+    pendingState = pendingState || state;
+    status(errorText(error, '自動同步'), 'error');
+  } finally {
+    uploadInFlight = false;
+  }
+}
+
+function scheduleUpload(state) {
+  if (!currentUser || applyingCloudState || !state) return;
+  pendingState = state;
+  clearTimeout(uploadTimer);
+  status('同步狀態：🟡 等候上載', 'idle');
+  uploadTimer = setTimeout(() => pushState(pendingState, '背景自動'), 900);
+}
+
+async function pullLatestOnLogin(user) {
+  if (!user || startupPullDoneForUid === user.uid) return;
+  startupPullDoneForUid = user.uid;
+  status('同步狀態：🔵 正在檢查雲端資料', 'busy');
+  try {
+    const snapshot = await withTimeout(fs.getDoc(cloudRef(user)));
+    if (!snapshot.exists()) {
+      await pushState(localState(), '首次');
+      return;
+    }
+    const remote = snapshot.data()?.state;
+    const remoteTime = cloudUpdatedAt(snapshot);
+    const localTime = localUpdatedAt();
+    if (remote && remoteTime > localTime) {
+      applyDownloadedState(remote);
+      status('同步狀態：🟢 已載入較新雲端資料', 'ok');
+    } else if (localTime > remoteTime) {
+      await pushState(localState(), '啟動');
+    } else {
+      status('同步狀態：🟢 已與雲端同步', 'ok');
+    }
+  } catch (error) {
+    startupPullDoneForUid = '';
+    status(errorText(error, '啟動同步'), 'error');
+  }
+}
+
+function updateAuthUI(user) {
+  currentUser = user || null;
+  const signedIn = Boolean(currentUser);
+  setAuthControls(signedIn);
+  if (!signedIn) {
+    startupPullDoneForUid = '';
+    if (cloudButton) {
+      cloudButton.textContent = '雲端登入';
+      cloudButton.title = '開啟雲端登入';
+    }
+    status('同步狀態：尚未登入', 'idle');
+    return;
+  }
+  const name = userLabel(currentUser);
+  if (cloudButton) {
+    cloudButton.textContent = name.length > 10 ? '已登入' : name;
+    cloudButton.title = name;
+  }
+  status(`已登入：${name}`, 'ok');
+  void pullLatestOnLogin(currentUser);
 }
 
 setAuthControls(false);
 cloudButton?.addEventListener('click', () => { if (modal) modal.style.display = 'grid'; });
 $('closeCloud')?.addEventListener('click', () => { if (modal) modal.style.display = 'none'; });
+window.addEventListener('etf-local-save', event => scheduleUpload(event.detail));
 
 async function start() {
   if (!configured) return status('Firebase 尚未設定。', 'error');
   try {
     const appmod = await import('https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js');
     const authmod = await import('https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js');
-    const fsmod = await import('https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js');
+    fs = await import('https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js');
     const app = appmod.initializeApp(firebaseConfig);
     auth = authmod.getAuth(app);
-    db = fsmod.getFirestore(app);
+    db = fs.getFirestore(app);
     await authmod.setPersistence(auth, authmod.browserLocalPersistence);
     authmod.onAuthStateChanged(auth, updateAuthUI);
 
@@ -95,64 +199,20 @@ async function start() {
       if (!auth) return status('Firebase 尚未完成載入。', 'error');
       const popup = authmod.signInWithPopup(auth, new authmod.GoogleAuthProvider());
       status('正在開啟 Google 登入...', 'busy');
-      popup.then(result => updateAuthUI(result.user)).catch(error => status(errorText(error, '登入'), 'error'));
+      popup.catch(error => status(errorText(error, '登入'), 'error'));
     };
 
     googleLogout.onclick = () => authmod.signOut(auth).catch(error => status(errorText(error, '登出'), 'error'));
-
-    async function upload(data = window.ETFProApp?.getState?.()) {
-      if (!currentUser) return status('請先登入 Google。', 'idle');
-      if (busy || !data) return;
-      busy = true;
-      status('正在上載雲端...', 'busy');
-      try {
-        await timeout(fsmod.setDoc(cloudRef(fsmod, currentUser), {
-          state: data,
-          updatedAt: fsmod.serverTimestamp()
-        }, { merge: true }));
-        status('雲端同步完成', 'ok');
-      } catch (error) {
-        status(errorText(error, '上載'), 'error');
-      } finally {
-        busy = false;
-      }
-    }
-
-    uploadCloud.onclick = () => upload();
-    downloadCloud.onclick = async () => {
-      if (!currentUser) return status('請先登入 Google。', 'idle');
-      if (busy || !confirm('下載雲端資料會覆蓋目前本機資料，確定繼續？')) return;
-      busy = true;
-      status('正在下載雲端資料...', 'busy');
-      try {
-        const snapshot = await timeout(fsmod.getDoc(cloudRef(fsmod, currentUser)));
-        if (!snapshot.exists()) throw new Error('雲端未有資料。');
-        localStorage.setItem('ETF_CORE_PRO_V1_PRE_CLOUD_DOWNLOAD', JSON.stringify(window.ETFProApp.getState()));
-        suppress = true;
-        try {
-          window.ETFProApp.setState(snapshot.data().state || {});
-        } finally {
-          suppress = false;
-        }
-        status('雲端資料已下載', 'ok');
-      } catch (error) {
-        status(errorText(error, '下載'), 'error');
-      } finally {
-        busy = false;
-      }
-    };
-
-    window.addEventListener('etf-local-save', event => {
-      if (!currentUser || suppress || busy) return;
-      clearTimeout(saveTimer);
-      status('等候同步...', 'idle');
-      saveTimer = setTimeout(() => upload(event.detail), 1800);
-    });
   } catch (error) {
     status(errorText(error, 'Firebase 載入'), 'error');
   }
 }
 
 start();
-window.addEventListener('offline', () => status('離線模式', 'idle'));
-window.addEventListener('online', () => currentUser && status(`已登入：${userLabel(currentUser)}`, 'ok'));
+window.addEventListener('offline', () => status('同步狀態：離線，資料已保存在本機', 'idle'));
+window.addEventListener('online', () => {
+  if (currentUser) {
+    if (pendingState) void pushState(pendingState, '重新連線');
+    else void pullLatestOnLogin(currentUser);
+  }
+});
