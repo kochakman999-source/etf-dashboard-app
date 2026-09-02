@@ -1,12 +1,14 @@
-ETF Core Portfolio v8.2 Complete Final
+ETF Core Portfolio v8.3 Compact Dates Final
 Build: 2026-09-02
 
-Header fix
-- Single 68px mobile header row.
-- Page title, privacy, theme and Cloud Login stay aligned horizontally.
-- Privacy and theme icons are visible, with no empty boxes.
-- Cloud Login opens the existing modal and Google sign-in uses popup directly from its click event.
+Change in this release
+- All date and month controls are compact: 180px wide, 40px high and 14px text.
+- On screens at or below 390px, controls are 165px wide.
+- Main amount, ETF, direction and funding fields remain full width.
+- Dark-mode date and month colors are included.
 
-Whole-app checks include all ten pages, ETF buy/sell and cash linkage, cash deposit/withdraw/exchange, strategy, budgets, market data, monthly snapshots, projection, performance, dividends, goals, import/export, privacy/theme, Firebase Auth, Firestore paths, service worker, JavaScript syntax, ZIP integrity and local HTTP serving.
-
-Actual Google/Firebase authorization requires the GitHub Pages hostname in Firebase Authorized domains and suitable Firestore Security Rules.
+Cloud behavior
+- First successful login: press Upload Local Data once if the cloud contains no portfolio.
+- Afterwards, every app save dispatches etf-local-save and automatically uploads after 1.8 seconds.
+- Manual Upload remains available as a recovery action.
+- Login state uses browserLocalPersistence.
