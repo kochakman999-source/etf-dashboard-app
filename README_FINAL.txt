@@ -1,35 +1,24 @@
-ETF Core Portfolio v6.9 Cloud Sync + Mobile Final
-=================================================
+ETF Core Portfolio v7.0 Goals Complete Final
+Build date: 2026-09-02
 
-ZIP files
-- index.html
-- service-worker.js
-- cloud-sync.js
-- firebase-config.js
-- README_FINAL.txt
+New goals workflow
+- Add a goal with name, target, current amount, target date and investable status.
+- Mark a goal completed.
+- Restore a completed goal to in progress.
+- Delete a goal with confirmation.
+- Completed status and completedAt timestamp persist in localStorage and cloud state.
+- Existing goals are migrated non-destructively with IDs and completed=false.
+- Goals sort active first, completed last.
+- Mobile goal cards include large action buttons and responsive layout.
 
-Firebase setup
-1. In Firebase Console, create/select a project.
-2. Add a Web app and copy its configuration into firebase-config.js.
-3. Enable Authentication > Sign-in method > Google.
-4. Create Firestore Database.
-5. Add your GitHub Pages host, for example USERNAME.github.io, to Authentication > Settings > Authorized domains.
-6. Upload all five files to the GitHub repository root.
-7. Deploy GitHub Pages from main / root.
-8. Open the site, choose Cloud Sync, then sign in with Google.
+Package files
+index.html
+cloud-sync.js
+firebase-config.js
+service-worker.js
+README_FINAL.txt
 
-Recommended Firestore rules
-Use authenticated user-only access for the users collection. Do not publish a database with unrestricted read/write rules.
+Firebase note
+The supplied firebase-config.js contains PASTE_ placeholders. Keep your existing configured firebase-config.js when deploying, or replace the placeholders with your real Firebase Web App values. Live Google/Firebase authentication cannot operate with placeholder values.
 
-Mobile behavior
-- Cloud Sync is under More > Cloud Sync.
-- Mobile/installed PWA uses Google redirect sign-in.
-- Desktop uses the Google popup flow.
-
-Data workflow
-- On the device containing the latest portfolio, sign in and choose Upload Local Data.
-- On a new device, sign in and choose Download Cloud Data.
-- Keep periodic JSON backups even when cloud sync is enabled.
-
-Cache
-The service-worker cache is etf-core-v6-9-cloud-mobile-final. If an old app remains visible, remove the old installed app/site data, reload in Safari/Chrome, then add it to the home screen again.
+Deploy all files to the GitHub Pages repository root. If the old PWA remains visible, remove old site data or the installed app and reload.
