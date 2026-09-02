@@ -1,6 +1,15 @@
-ETF Core Portfolio v8.0 Integrated Final
-Build: 2026-09-02
+ETF Core Portfolio v7.5 FINAL VERIFIED
 
-Integrated fixes: non-blocking 3-second cloud check, no automatic cloud overwrite, manual upload/download timeouts and backup, cash duplicate/orphan diagnostics and safe repair, visible negative-balance source, goal complete/restore/delete, market queue and timeout, compact iOS month inputs, mobile goal cards, HK$1M layout and iOS PWA meta tags.
+The ETF transaction form permanently includes:
+- Buy / Sell direction
+- Funding Source: External Funds or Deduct from Cash Fund
+- Cash Fund: USD or HKD
 
-Deploy all five files to the GitHub Pages root. Remove old installed PWA/site data if an older cache remains.
+Verified behaviors:
+- Deposit adds cash; withdrawal subtracts cash.
+- External-funds buy does not deduct cash.
+- USD/HKD Cash Fund buy creates a linked withdrawal.
+- Insufficient balance disables and blocks Save.
+- Sell, linked cash reversal, dividend cash linkage, goals and mobile safe-area remain present.
+
+IMPORTANT: Preserve your existing REAL firebase-config.js. The packaged file is a placeholder only.
