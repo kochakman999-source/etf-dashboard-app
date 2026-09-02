@@ -1,24 +1,19 @@
-ETF Core Portfolio v7.0 Goals Complete Final
-Build date: 2026-09-02
+ETF Core Portfolio v7.1 Mobile Layout + Cloud Final
+Build: 2026-09-02
 
-New goals workflow
-- Add a goal with name, target, current amount, target date and investable status.
-- Mark a goal completed.
-- Restore a completed goal to in progress.
-- Delete a goal with confirmation.
-- Completed status and completedAt timestamp persist in localStorage and cloud state.
-- Existing goals are migrated non-destructively with IDs and completed=false.
-- Goals sort active first, completed last.
-- Mobile goal cards include large action buttons and responsive layout.
+Fixes
+- Rebuilt goal-card layout to prevent amount, progress, status and action overlap.
+- Goal amount uses 17px, wrapping and break-all.
+- Goal date uses compact 12px text.
+- Goal actions have a dedicated responsive row.
+- Removed the duplicate Mobile More > Cloud Sync entry. Cloud login remains in the top bar.
+- Rebuilt the Home HK$1M value row and USD secondary typography.
+- Firebase Auth now uses browserLocalPersistence, getRedirectResult and onAuthStateChanged.
+- Mobile/PWA uses redirect sign-in. Desktop uses popup sign-in.
 
-Package files
-index.html
-cloud-sync.js
-firebase-config.js
-service-worker.js
-README_FINAL.txt
+Firebase Console requirements
+- Enable Google provider.
+- Add the GitHub Pages host to Authorized domains.
+- Use authenticated, user-scoped Firestore rules.
 
-Firebase note
-The supplied firebase-config.js contains PASTE_ placeholders. Keep your existing configured firebase-config.js when deploying, or replace the placeholders with your real Firebase Web App values. Live Google/Firebase authentication cannot operate with placeholder values.
-
-Deploy all files to the GitHub Pages repository root. If the old PWA remains visible, remove old site data or the installed app and reload.
+Upload all five files to the repository root. If an old version is cached, remove old site data or the installed PWA, then reload.
