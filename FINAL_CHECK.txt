@@ -1,13 +1,19 @@
-ETF Core Portfolio v9.2 Verified Final
-PASS 10 app pages parsed
-PASS 24 inline JavaScript blocks passed syntax checks
-PASS cloud-sync.js passed syntax check
-PASS naked bank.value and legacy bank event references removed
-PASS saveTrade old listeners cleared by button replacement
-PASS one final click save entry with try/catch and alert
-PASS transaction and linked cash persist before render
-PASS Normal Contribution selected and restored on reset
-PASS cloud whitelist ignores obsolete bank and unknown fields
-PASS signed-in UI hides login and shows upload/download/logout
-PASS ZIP integrity test
-LIMITATION Live Google sign-in, Firestore permissions and physical iOS PWA require deployment smoke test.
+ETF Core Portfolio v9.3 Verified Final
+Build date: 2026-09-03
+
+PASS HTML structure: 10 main app pages and one saveTrade button
+PASS JavaScript syntax: all 24 inline scripts
+PASS Module syntax: cloud-sync.js
+PASS Service Worker syntax and fresh v9.3 cache name
+PASS Removed naked bank.value and legacy [bank,...] DOM-global listener
+PASS One authoritative save transaction click endpoint after cloning the button
+PASS Buy/sell validation, try/catch and alert error reporting
+PASS State and localStorage persistence occurs before render
+PASS Normal Contribution selected in HTML and restored on reset
+PASS Cloud state whitelist ignores obsolete bank and unknown properties
+PASS Signed-in UI hides Google login and shows upload/download/logout
+PASS Manual upload and download handlers present
+PASS Network-first no-store Service Worker and old-cache deletion
+PASS ZIP archive integrity
+
+Deployment-only checks still required: Google popup authentication, Firestore Security Rules, network connectivity and physical iOS PWA touch behavior.
