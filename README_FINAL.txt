@@ -1,8 +1,14 @@
-ETF Core Portfolio v9.1 Ultimate Fix Final
-Build: 2026-09-03
+ETF Core Portfolio v9.0 Auto Cloud Final
+Build: 2026-09-02
 
-Fixes:
-1. Save Trade uses one clean click handler with try/catch and alert on error.
-2. Cloud download filters remote properties through an allowlist and contains no bank identifier.
-3. Normal Monthly Contribution is selected by default and restored after every save/reset.
-4. Signed-in cloud UI hides Google Login and shows Upload, Download and Logout. Signed-out UI does the reverse.
+Cloud behavior
+- No direct bank variable access exists in cloud-sync.js.
+- Cloud download applies the complete state through window.ETFProApp.setState().
+- On login, cloud and local update times are compared. The newer state wins.
+- If the cloud document is absent, the local state is uploaded automatically.
+- Every etf-local-save event is uploaded in the background after 900 ms.
+- Multiple saves are coalesced and the latest pending state is uploaded next.
+- Upload and Download buttons are hidden. Signed-in users see sync status and Logout.
+- Cloud application creates an automatic pre-download local backup.
+
+Actual Firebase access still requires the GitHub Pages hostname in Firebase Authentication Authorized domains and suitable Firestore Security Rules.
