@@ -1,20 +1,19 @@
-ETF Core Portfolio v9.4 Verified Final
+ETF Core Portfolio v9.5 Stable Save Final
 Build: 2026-09-03
 
 PASS 10 main pages and one saveTrade button
-PASS all inline JavaScript syntax checks
-PASS cloud-sync.js syntax check
-PASS service-worker.js syntax check
-PASS cloud state uses Object.assign in-place merge, no state reassignment
-PASS cloud render and language refresh errors are isolated from synchronization
-PASS downloaded state is persisted directly to localStorage
-PASS obsolete bank and unknown cloud fields are ignored by whitelist
-PASS naked bank.value references removed
-PASS one authoritative trade save click endpoint
-PASS buy/sell validation, try/catch and alert reporting
-PASS Normal Contribution selected and restored after reset
-PASS signed-in Auth UI hides login and shows upload/download/logout
-PASS fresh v9.4 Service Worker cache and old-cache cleanup
+PASS all 24 inline JavaScript blocks passed syntax checks
+PASS cloud-sync.js and service-worker.js syntax checks
+PASS transaction writes directly to state and localStorage
+PASS saved transaction is read back and verified before success
+PASS transaction save bypasses the legacy render chain
+PASS app reloads after save and displays the saved message
+PASS cloud download uses in-place merge and direct localStorage persistence
+PASS cloud download bypasses legacy ETFProApp.setState render chain
+PASS naked bank.value references remain removed
+PASS Normal Contribution selected and restored
+PASS misleading v6.6 badge rewrite removed
+PASS fresh v9.5 Service Worker cache
 PASS ZIP integrity
 
-Deployment-only smoke tests remain necessary for Google popup, Firestore Security Rules, live network and physical iOS PWA behavior.
+Physical browser, Google authentication, Firestore permissions and live iOS PWA still require deployment smoke testing.

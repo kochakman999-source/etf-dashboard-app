@@ -96,9 +96,11 @@ function applyDownloadedState(nextState) {
   try {
     const cleanState = sanitizeState(JSON.parse(JSON.stringify(nextState)));
     cleanState.lastCloudSync = new Date().toISOString();
-    if (!window.ETFProApp?.setState) throw new Error('App狀態介面尚未完成載入。');
-    window.ETFProApp.setState(cleanState);
-    localStorage.setItem('ETF_CORE_PRO_V1', JSON.stringify(window.ETFProApp.getState()));
+    const current = window.ETFProApp?.getState?.() || {};
+    const merged = Object.assign(current, cleanState);
+    localStorage.setItem('ETF_CORE_PRO_V1', JSON.stringify(merged));
+    sessionStorage.setItem('ETF_CLOUD_MESSAGE', '已載入較新雲端資料');
+    location.reload();
   } finally {
     applyingCloudState = false;
   }
