@@ -1,19 +1,20 @@
-ETF Core Portfolio v9.3 Verified Final
-Build date: 2026-09-03
+ETF Core Portfolio v9.4 Verified Final
+Build: 2026-09-03
 
-PASS HTML structure: 10 main app pages and one saveTrade button
-PASS JavaScript syntax: all 24 inline scripts
-PASS Module syntax: cloud-sync.js
-PASS Service Worker syntax and fresh v9.3 cache name
-PASS Removed naked bank.value and legacy [bank,...] DOM-global listener
-PASS One authoritative save transaction click endpoint after cloning the button
-PASS Buy/sell validation, try/catch and alert error reporting
-PASS State and localStorage persistence occurs before render
-PASS Normal Contribution selected in HTML and restored on reset
-PASS Cloud state whitelist ignores obsolete bank and unknown properties
-PASS Signed-in UI hides Google login and shows upload/download/logout
-PASS Manual upload and download handlers present
-PASS Network-first no-store Service Worker and old-cache deletion
-PASS ZIP archive integrity
+PASS 10 main pages and one saveTrade button
+PASS all inline JavaScript syntax checks
+PASS cloud-sync.js syntax check
+PASS service-worker.js syntax check
+PASS cloud state uses Object.assign in-place merge, no state reassignment
+PASS cloud render and language refresh errors are isolated from synchronization
+PASS downloaded state is persisted directly to localStorage
+PASS obsolete bank and unknown cloud fields are ignored by whitelist
+PASS naked bank.value references removed
+PASS one authoritative trade save click endpoint
+PASS buy/sell validation, try/catch and alert reporting
+PASS Normal Contribution selected and restored after reset
+PASS signed-in Auth UI hides login and shows upload/download/logout
+PASS fresh v9.4 Service Worker cache and old-cache cleanup
+PASS ZIP integrity
 
-Deployment-only checks still required: Google popup authentication, Firestore Security Rules, network connectivity and physical iOS PWA touch behavior.
+Deployment-only smoke tests remain necessary for Google popup, Firestore Security Rules, live network and physical iOS PWA behavior.

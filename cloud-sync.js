@@ -96,7 +96,9 @@ function applyDownloadedState(nextState) {
   try {
     const cleanState = sanitizeState(JSON.parse(JSON.stringify(nextState)));
     cleanState.lastCloudSync = new Date().toISOString();
+    if (!window.ETFProApp?.setState) throw new Error('App狀態介面尚未完成載入。');
     window.ETFProApp.setState(cleanState);
+    localStorage.setItem('ETF_CORE_PRO_V1', JSON.stringify(window.ETFProApp.getState()));
   } finally {
     applyingCloudState = false;
   }

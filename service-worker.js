@@ -1,4 +1,4 @@
-const CACHE_NAME='etf-core-v9-3-verified-final-20260903';
+const CACHE_NAME='etf-core-v9-4-state-merge-final-20260903';
 const APP=['./','./index.html','./cloud-sync.js','./firebase-config.js','./README_FINAL.txt'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))));self.clients.claim();});
