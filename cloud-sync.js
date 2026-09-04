@@ -1,175 +1,199 @@
-import { firebaseConfig } from "./firebase-config.js";
+import { firebaseConfig } from './firebase-config.js';
 
-const STORAGE_KEY = "ETF_CORE_PRO_V1";
-const COLLECTION = "portfolioData";
-const DOCUMENT = "main";
+const STORAGE_KEY = 'ETF_CORE_PRO_V1';
+const COLLECTION = 'portfolioData';
+const DOCUMENT_ID = 'main';
 const el = id => document.getElementById(id);
 
-let currentUser = null;
-let db = null;
-let fs = null;
-let authApi = null;
 let auth = null;
-let uploadTimer = null;
-let suppressAutoUpload = false;
+let db = null;
+let api = null;
+let user = null;
+let loginBusy = false;
+let autoSyncTimer = null;
+let applyingCloud = false;
 
-function configIsValid() {
-  const required = ["apiKey", "authDomain", "projectId", "appId"];
-  return required.every(key => {
+function setStatus(message, type = 'idle') {
+  if (el('cloudInfo')) el('cloudInfo').textContent = message;
+  if (el('syncText')) el('syncText').textContent = message;
+  if (el('syncDot')) el('syncDot').style.background = type === 'ok' ? '#22c55e' : type === 'error' ? '#ef4444' : '#f59e0b';
+}
+
+function setControls(signedIn) {
+  if (el('googleLogin')) el('googleLogin').style.display = signedIn ? 'none' : '';
+  if (el('googleLogout')) el('googleLogout').style.display = signedIn ? '' : 'none';
+  if (el('uploadCloud')) el('uploadCloud').style.display = signedIn ? '' : 'none';
+  if (el('downloadCloud')) el('downloadCloud').style.display = signedIn ? '' : 'none';
+}
+
+function validConfig() {
+  return ['apiKey', 'authDomain', 'projectId', 'appId'].every(key => {
     const value = firebaseConfig?.[key];
-    return typeof value === "string" && value.length > 4 && !value.includes("YOUR_");
+    return typeof value === 'string' && value.length > 4 && !value.includes('YOUR_');
   });
 }
 
-function status(text, mode = "idle") {
-  if (el("cloudInfo")) el("cloudInfo").textContent = text;
-  if (el("syncText")) el("syncText").textContent = text;
-  if (el("syncDot")) {
-    el("syncDot").style.background = mode === "ok" ? "#22c55e" : mode === "error" ? "#ef4444" : "#f59e0b";
-  }
-}
-
-function controls(signedIn) {
-  if (el("googleLogin")) el("googleLogin").style.display = signedIn ? "none" : "inline-block";
-  if (el("googleLogout")) el("googleLogout").style.display = signedIn ? "inline-block" : "none";
-  if (el("uploadCloud")) el("uploadCloud").style.display = signedIn ? "inline-block" : "none";
-  if (el("downloadCloud")) el("downloadCloud").style.display = signedIn ? "inline-block" : "none";
-}
-
-function localData() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+function readLocal() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
   catch { return {}; }
 }
 
-function localUpdatedAt(data = localData()) {
-  const time = Date.parse(data.lastSaved || data.updatedAt || "");
-  return Number.isFinite(time) ? time : 0;
+function localTime(data = readLocal()) {
+  return Date.parse(data.lastSaved || data.updatedAt || '') || 0;
 }
 
-function applyCloudData(data) {
-  suppressAutoUpload = true;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  if (window.ETFProApp?.setState) window.ETFProApp.setState(data);
-  else if (window.ETFPortfolioApp?.setState) window.ETFPortfolioApp.setState(data);
-  else location.reload();
-  setTimeout(() => { suppressAutoUpload = false; }, 1000);
+function friendly(error) {
+  const code = error?.code || '';
+  if (code === 'auth/unauthorized-domain') return '登入失敗：請將 GitHub Pages 網域加入 Firebase Authorized domains。';
+  if (code === 'auth/operation-not-allowed') return '登入失敗：Firebase 尚未啟用 Google 登入。';
+  if (code === 'auth/popup-blocked') return '登入視窗被封鎖，請允許 Safari 彈出式視窗後再試。';
+  if (code === 'auth/popup-closed-by-user') return 'Google 登入視窗已關閉。';
+  if (code === 'auth/network-request-failed') return '登入失敗：請檢查網絡。';
+  return `Google 登入失敗：${error?.message || code || '未知錯誤'}`;
 }
 
-async function upload(showSuccess = true) {
-  if (!currentUser || !db || !fs) throw new Error("請先登入Google帳戶");
-  const payload = localData();
+function reference() {
+  return api.doc(db, COLLECTION, user.uid, 'documents', DOCUMENT_ID);
+}
+
+async function upload(showMessage = true) {
+  if (!user) throw new Error('請先登入 Google 帳戶');
+  const payload = readLocal();
   const updatedAt = new Date().toISOString();
   payload.lastSaved = payload.lastSaved || updatedAt;
-  const ref = fs.doc(db, COLLECTION, currentUser.uid, "documents", DOCUMENT);
-  await fs.setDoc(ref, { ownerUid: currentUser.uid, updatedAt, payload }, { merge: true });
-  if (showSuccess) status("雲端上載完成", "ok");
+  await api.setDoc(reference(), { ownerUid: user.uid, updatedAt, payload }, { merge: true });
+  if (showMessage) setStatus('雲端上載完成', 'ok');
+}
+
+function applyCloud(payload) {
+  applyingCloud = true;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload || {}));
+  sessionStorage.setItem('ETF_CLOUD_MESSAGE', '已下載雲端資料');
+  location.reload();
 }
 
 async function download(force = false) {
-  if (!currentUser || !db || !fs) throw new Error("請先登入Google帳戶");
-  const ref = fs.doc(db, COLLECTION, currentUser.uid, "documents", DOCUMENT);
-  const snap = await fs.getDoc(ref);
-  if (!snap.exists()) {
-    status("雲端未有資料，正在上載本機版本", "idle");
+  if (!user) throw new Error('請先登入 Google 帳戶');
+  const snapshot = await api.getDoc(reference());
+  if (!snapshot.exists()) {
+    setStatus('雲端未有資料，正在上載本機版本', 'idle');
     await upload(true);
     return;
   }
-  const cloud = snap.data();
-  const cloudTime = Date.parse(cloud.updatedAt || cloud.payload?.lastSaved || "") || 0;
-  if (force || cloudTime > localUpdatedAt()) {
-    applyCloudData(cloud.payload || {});
-    status("已下載雲端資料", "ok");
-  } else {
-    status("本機資料較新，正在上載", "idle");
-    await upload(true);
+  const cloud = snapshot.data();
+  const cloudTime = Date.parse(cloud.updatedAt || cloud.payload?.lastSaved || '') || 0;
+  if (force || cloudTime > localTime()) applyCloud(cloud.payload || {});
+  else await upload(true);
+}
+
+async function startLogin(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  if (loginBusy) return;
+  loginBusy = true;
+  setStatus('正在開啟 Google 登入…', 'idle');
+  try {
+    if (!auth || !api) throw new Error('Firebase 尚未完成載入，請稍後再試。');
+    const provider = new api.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    try {
+      await api.signInWithPopup(auth, provider);
+    } catch (error) {
+      if (error?.code === 'auth/popup-blocked') {
+        setStatus('彈出視窗被封鎖，正在改用頁面跳轉登入…', 'idle');
+        await api.signInWithRedirect(auth, provider);
+        return;
+      }
+      throw error;
+    }
+  } catch (error) {
+    console.error(error);
+    const message = friendly(error);
+    setStatus(message, 'error');
+    alert(message);
+  } finally {
+    loginBusy = false;
   }
 }
 
-function friendlyAuthError(error) {
-  const code = error?.code || "";
-  if (code === "auth/unauthorized-domain") return "登入失敗：請在Firebase Authentication加入GitHub Pages網域。";
-  if (code === "auth/operation-not-allowed") return "登入失敗：Firebase尚未啟用Google登入。";
-  if (code === "auth/popup-blocked") return "登入視窗被瀏覽器封鎖，請允許彈出視窗後再試。";
-  if (code === "auth/popup-closed-by-user") return "Google登入視窗已關閉。";
-  if (code === "auth/network-request-failed") return "登入失敗：請檢查網絡連線。";
-  return `Google登入失敗：${error?.message || code || "未知錯誤"}`;
+function bindButton(button, handler) {
+  if (!button || button.dataset.boundCloud === '1') return;
+  button.dataset.boundCloud = '1';
+  button.type = 'button';
+  button.style.pointerEvents = 'auto';
+  button.style.touchAction = 'manipulation';
+  button.addEventListener('click', handler, { passive: false });
+  button.addEventListener('pointerup', event => {
+    if (event.pointerType === 'touch') handler(event);
+  }, { passive: false });
+}
+
+function bindUI() {
+  bindButton(el('googleLogin'), startLogin);
+  bindButton(el('googleLogout'), async event => {
+    event.preventDefault();
+    try { await api.signOut(auth); } catch (error) { setStatus(friendly(error), 'error'); }
+  });
+  bindButton(el('uploadCloud'), event => {
+    event.preventDefault();
+    upload(true).catch(error => setStatus(`上載失敗：${error.message}`, 'error'));
+  });
+  bindButton(el('downloadCloud'), event => {
+    event.preventDefault();
+    download(true).catch(error => setStatus(`下載失敗：${error.message}`, 'error'));
+  });
 }
 
 function queueUpload() {
-  if (!currentUser || suppressAutoUpload) return;
-  clearTimeout(uploadTimer);
-  uploadTimer = setTimeout(() => upload(false).catch(error => {
-    console.error("Auto sync failed", error);
-    status("自動同步失敗", "error");
-  }), 1000);
+  if (!user || applyingCloud) return;
+  clearTimeout(autoSyncTimer);
+  autoSyncTimer = setTimeout(() => upload(false).catch(error => {
+    console.error(error);
+    setStatus('背景同步失敗', 'error');
+  }), 1200);
 }
 
-async function init() {
-  controls(false);
-  if (!configIsValid()) {
-    status("Firebase設定未完成，雲端登入已停用", "error");
+async function initialize() {
+  setControls(false);
+  bindUI();
+  if (!validConfig()) {
+    setStatus('Firebase 設定未完成', 'error');
     return;
   }
-
   try {
     const [appModule, authModule, firestoreModule] = await Promise.all([
-      import("https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"),
-      import("https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js"),
-      import("https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js")
+      import('https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js'),
+      import('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js')
     ]);
-
     const app = appModule.initializeApp(firebaseConfig);
-    authApi = authModule;
-    fs = firestoreModule;
     auth = authModule.getAuth(app);
     auth.useDeviceLanguage();
     db = firestoreModule.getFirestore(app);
-    const provider = new authModule.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
+    api = { ...authModule, ...firestoreModule };
 
-    el("googleLogin")?.addEventListener("click", async () => {
-      status("正在開啟Google登入…", "idle");
-      try {
-        await authModule.signInWithPopup(auth, provider);
-      } catch (error) {
-        console.error("Google sign-in failed", error);
-        status(friendlyAuthError(error), "error");
-      }
-    });
+    const redirectResult = await authModule.getRedirectResult(auth);
+    if (redirectResult?.user) setStatus(`已登入：${redirectResult.user.email || redirectResult.user.uid}`, 'ok');
 
-    el("googleLogout")?.addEventListener("click", async () => {
-      try { await authModule.signOut(auth); }
-      catch (error) { console.error(error); status("登出失敗", "error"); }
-    });
-
-    el("uploadCloud")?.addEventListener("click", () => upload(true).catch(error => {
-      console.error(error); status(`上載失敗：${error.message}`, "error");
-    }));
-
-    el("downloadCloud")?.addEventListener("click", () => download(true).catch(error => {
-      console.error(error); status(`下載失敗：${error.message}`, "error");
-    }));
-
-    authModule.onAuthStateChanged(auth, async user => {
-      currentUser = user;
-      controls(Boolean(user));
-      if (!user) {
-        status("同步狀態：尚未登入", "idle");
+    authModule.onAuthStateChanged(auth, async current => {
+      user = current;
+      setControls(Boolean(current));
+      if (!current) {
+        setStatus('同步狀態：尚未登入', 'idle');
         return;
       }
-      status(`已登入：${user.email || user.uid}`, "ok");
+      setStatus(`已登入：${current.email || current.uid}`, 'ok');
       try { await download(false); }
-      catch (error) { console.error(error); status(`首次同步失敗：${error.message}`, "error"); }
+      catch (error) { console.error(error); setStatus(`首次同步失敗：${error.message}`, 'error'); }
     });
 
-    window.addEventListener("etf-local-save", queueUpload);
-    window.addEventListener("storage", event => {
-      if (event.key === STORAGE_KEY) queueUpload();
-    });
+    window.addEventListener('etf-local-save', queueUpload);
+    setStatus('Firebase 已就緒，請登入 Google', 'idle');
   } catch (error) {
-    console.error("Firebase initialization failed", error);
-    status(`Firebase載入失敗：${error.message}`, "error");
+    console.error(error);
+    setStatus(`Firebase 載入失敗：${error.message}`, 'error');
   }
 }
 
-init();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize, { once: true });
+else initialize();
