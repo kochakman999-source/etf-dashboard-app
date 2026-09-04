@@ -1,21 +1,26 @@
 {
-  "name": "ETF Core Portfolio Ultimate",
+  "name": "ETF Core Portfolio System",
   "short_name": "ETF Portfolio",
-  "start_url": "./index.html",
+  "description": "Private ETF portfolio, cash reserve and Buy-only rebalancing system.",
+  "lang": "zh-HK",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f5f7fb",
   "theme_color": "#091827",
+  "orientation": "any",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
