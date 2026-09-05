@@ -58,6 +58,7 @@ async function fetchCloudData(user, isManual = false) {
     try {
         if (cloudInfo && isManual) cloudInfo.textContent = '正在從雲端下載資料...';
         
+        // 確保只有呢行宣告，完美對齊 firestore.rules
         const docRef = doc(db, "portfolioData", user.uid, "documents", "main");
         const docSnap = await getDoc(docRef);
 
@@ -93,6 +94,8 @@ async function uploadData(user, isAuto = false) {
         if (uploadBtn) uploadBtn.disabled = true;
 
         const currentState = window.ETFProApp.getState();
+        
+        // 確保只有呢行宣告，完美對齊 firestore.rules
         const docRef = doc(db, "portfolioData", user.uid, "documents", "main");
 
         await setDoc(docRef, {
@@ -110,6 +113,7 @@ async function uploadData(user, isAuto = false) {
     }
 }
 
+// 登入按鈕
 loginBtn?.addEventListener('click', async () => {
     try {
         if (cloudInfo) cloudInfo.textContent = '正在開啟 Google 登入...';
@@ -121,6 +125,7 @@ loginBtn?.addEventListener('click', async () => {
     }
 });
 
+// 登出按鈕
 logoutBtn?.addEventListener('click', async () => {
     try {
         await signOut(auth);
