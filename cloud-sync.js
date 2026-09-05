@@ -59,8 +59,8 @@ async function fetchCloudData(user, isManual = false) {
     try {
         if (cloudInfo && isManual) cloudInfo.textContent = '正在從雲端下載資料...';
         
-        // 統一使用 /portfolioData/{uid} 路徑
-        const docRef = doc(db, "portfolioData", user.uid);
+        // 修正：完全對齊 firestore.rules 的四層路徑結構
+        const docRef = doc(db, "portfolioData", user.uid, "documents", "main");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -96,7 +96,8 @@ async function uploadData(user, isAuto = false) {
         if (uploadBtn) uploadBtn.disabled = true;
 
         const currentState = window.ETFProApp.getState();
-        const docRef = doc(db, "portfolioData", user.uid);
+        // 修正：完全對齊 firestore.rules 的四層路徑結構
+        const docRef = doc(db, "portfolioData", user.uid, "documents", "main");
 
         await setDoc(docRef, {
             data: JSON.stringify(currentState),
