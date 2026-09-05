@@ -30,10 +30,10 @@ const uploadBtn = document.getElementById('uploadCloud');
 const downloadBtn = document.getElementById('downloadCloud');
 const cloudInfo = document.getElementById('cloudInfo');
 
-// 1. 強制設定持久化（記住登入狀態）
+// 1. 強制鎖死本地登入狀態
 setPersistence(auth, browserLocalPersistence).catch(console.error);
 
-// 2. 監聽登入狀態改變（自動同步）
+// 2. 監聽登入狀態改變
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         if (cloudInfo) cloudInfo.textContent = `已登入：${user.email}`;
@@ -42,7 +42,6 @@ onAuthStateChanged(auth, async (user) => {
         if (uploadBtn) uploadBtn.style.display = 'inline-block';
         if (downloadBtn) downloadBtn.style.display = 'inline-block';
 
-        // 登入成功後自動從雲端同步一次，解決 Refresh 歸零問題
         await fetchCloudData(user, false);
     } else {
         if (cloudInfo) cloudInfo.textContent = '同步狀態：尚未登入';
@@ -53,13 +52,12 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// 核心：拉取雲端資料函數
+// 拉取雲端資料
 async function fetchCloudData(user, isManual = false) {
     if (!user) return;
     try {
         if (cloudInfo && isManual) cloudInfo.textContent = '正在從雲端下載資料...';
         
-        // 修正：完全對齊 firestore.rules 的四層路徑結構
         const docRef = doc(db, "portfolioData", user.uid, "documents", "main");
         const docSnap = await getDoc(docRef);
 
@@ -73,7 +71,6 @@ async function fetchCloudData(user, isManual = false) {
                 if (cloudInfo) cloudInfo.textContent = `已同步雲端資料 (${new Date().toLocaleTimeString()})`;
             }
         } else {
-            // 雲端若為空，檢查本機是否有數據，有的話自動上傳初始備份
             if (window.ETFProApp && typeof window.ETFProApp.getState === 'function') {
                 const localState = window.ETFProApp.getState();
                 if (localState && (localState.etfs?.length || localState.transactions?.length)) {
@@ -88,7 +85,7 @@ async function fetchCloudData(user, isManual = false) {
     }
 }
 
-// 核心：上傳資料至雲端函數
+// 上傳資料至雲端
 async function uploadData(user, isAuto = false) {
     if (!user) return;
     try {
@@ -96,7 +93,6 @@ async function uploadData(user, isAuto = false) {
         if (uploadBtn) uploadBtn.disabled = true;
 
         const currentState = window.ETFProApp.getState();
-        // 修正：完全對齊 firestore.rules 的四層路徑結構
         const docRef = doc(db, "portfolioData", user.uid, "documents", "main");
 
         await setDoc(docRef, {
@@ -114,7 +110,6 @@ async function uploadData(user, isAuto = false) {
     }
 }
 
-// 登入按鈕
 loginBtn?.addEventListener('click', async () => {
     try {
         if (cloudInfo) cloudInfo.textContent = '正在開啟 Google 登入...';
@@ -126,7 +121,6 @@ loginBtn?.addEventListener('click', async () => {
     }
 });
 
-// 登出按鈕
 logoutBtn?.addEventListener('click', async () => {
     try {
         await signOut(auth);
@@ -135,8 +129,5 @@ logoutBtn?.addEventListener('click', async () => {
     }
 });
 
-// 手動上載按鈕
 uploadBtn?.addEventListener('click', () => uploadData(auth.currentUser, false));
-
-// 手動下載按鈕
 downloadBtn?.addEventListener('click', () => fetchCloudData(auth.currentUser, true));
