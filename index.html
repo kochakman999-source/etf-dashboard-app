@@ -526,8 +526,26 @@ tradeDate.value=new Date().toISOString().slice(0,10);preview();render();applyLan
   // Sell-only rebalancing calculator.
   const sellCard=document.querySelector('#income .card:last-of-type');
   if(sellCard&&!document.getElementById('sellOnlyTarget'))sellCard.insertAdjacentHTML('afterend',`<div class="card"><h3>沽出套現再平衡計算機</h3><p style="color:var(--muted)">只建議沽出，不會建議買入。按套現後規模及目前 ${state.targets.join(' / ')} 目標計算。</p><div class="formgrid"><div class="field"><label>目標套現金額 HKD</label><input id="sellOnlyTarget" type="number" min="0" step="100" placeholder="例如 100000"></div></div><div id="sellOnlySummary" class="source-note">輸入目標套現金額後顯示行動清單。</div><div id="sellOnlyPlan" class="sell-plan"></div></div>`);
-  function renderSellOnly(){if(!window.sellOnlyTarget)return;const target=Math.max(0,num(sellOnlyTarget.value)),h=holdings(),gv=[h.filter(x=>x.group==='Nasdaq-100組').reduce((a,b)=>a+b.value,0),h.filter(x=>x.group==='S&P 500組').reduce((a,b)=>a+b.value,0),h.filter(x=>x.group==='SMH').reduce((a,b)=>a+b.value,0)],total=gv.reduce((a,b)=>a+b,0),cashout=Math.min(target,total),post=Math.max(0,total-cashout),tar=state.targets.map(x=>x/100),ideal=tar.map(x=>x*post),excess=gv.map((x,i)=>Math.max(0,x-ideal[i])),need=cashout;let sells=[0,0,0];const order=[0,1,2].sort((a,b)=>excess[b]-excess[a]);for(const i of order){const take=Math.min(need,excess[i]);sells[i]+=take;need-=take}if(need>0){const avail=gv.map((v,i)=>Math.max(0,v-sells[i]));const sum=avail.reduce((a,b)=>a+b,0);avail.forEach((v,i)=>sells[i]+=sum?need*v/sum:0)}const names=['Nasdaq-100組','S&P 500組','SMH'];sellOnlySummary.innerHTML=`目前ETF ${moneyPair(total)}，目標套現 ${moneyPair(cashout)}，套現後ETF規模 ${moneyPair(post)}。${target>total?' 輸入金額高於ETF總市值，已按可套現上限計算。':''}`;sellOnlyPlan.innerHTML=names.map((n,i)=>`<div class="sell-plan-row"><b>${n}</b><div><small>目前 ${moneyPair(gv[i])}<br>套現後理想市值 ${moneyPair(ideal[i])}</small></div><div class="sell-amt"><small>建議沽出</small><strong class="negative">${moneyPair(sells[i])}</strong></div></div>`).join('')}
-  if(window.sellOnlyTarget)sellOnlyTarget.oninput=renderSellOnly;
+ function renderSellOnly(){
+    if(!window.sellOnlyTarget)return;
+    const target=Math.max(0,num(sellOnlyTarget.value)),h=holdings(),gv=[h.filter(x=>x.group==='Nasdaq-100組').reduce((a,b)=>a+b.value,0),h.filter(x=>x.group==='S&P 500組').reduce((a,b)=>a+b.value,0),h.filter(x=>x.group==='SMH').reduce((a,b)=>a+b.value,0)],total=gv.reduce((a,b)=>a+b,0),cashout=Math.min(target,total),post=Math.max(0,total-cashout),tar=state.targets.map(x=>x/100),ideal=tar.map(x=>x*post),excess=gv.map((x,i)=>Math.max(0,x-ideal[i]));
+    let need=cashout;
+    let sells=[0,0,0];
+    const order=[0,1,2].sort((a,b)=>excess[b]-excess[a]);
+    for(const i of order){
+      const take=Math.min(need,excess[i]);
+      sells[i]+=take;
+      need-=take;
+    }
+    if(need>0){
+      const avail=gv.map((v,i)=>Math.max(0,v-sells[i]));
+      const sum=avail.reduce((a,b)=>a+b,0);
+      avail.forEach((v,i)=>sells[i]+=sum?need*v/sum:0);
+    }
+    const names=['Nasdaq-100組','S&P 500組','SMH'];
+    sellOnlySummary.innerHTML=`目前ETF ${moneyPair(total)}，目標套現 ${moneyPair(cashout)}，套現後ETF規模 ${moneyPair(post)}。${target>total?' 輸入金額高於ETF總市值，已按可套現上限計算。':''}`;
+    sellOnlyPlan.innerHTML=names.map((n,i)=>`<div class="sell-plan-row"><b>${n}</b><div><small>目前 ${moneyPair(gv[i])}<br>套現後理想市值 ${moneyPair(ideal[i])}</small></div><div class="sell-amt"><small>建議沽出</small><strong class="negative">${moneyPair(sells[i])}</strong></div></div>`).join('');
+  }
 
   const baseRender=render;
   render=function(){baseRender();const b=cashBalances(),cashFund=cashTotalHkd(),hs=holdings(),etf=hs.reduce((a,x)=>a+x.value,0),cost=hs.reduce((a,x)=>a+x.hkd,0),cash=num(state.bank)+cashFund,total=etf+cash,gain=etf-cost;
