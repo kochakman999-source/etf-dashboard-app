@@ -1333,13 +1333,31 @@ function renderHero(h){
   if(q('heroMainBuy'))q('heroMainBuy').textContent='';
 }
 function buyOnly(h){
-  const rows=(Array.isArray(h)?h:monthlyConfigs().map(itemData)).filter(x=>(x.useMode||'monthly')==='monthly'&&num(x.target)>0),month=viewMonth(),budget=num(q('rebalancePay')?.value)||num(state.nextPay),current=rows.reduce((a,x)=>a+x.value,0),done=rows.map(x=>isDone(x,month)),open=rows.filter((x,i)=>!done[i]),future=current+budget,needs=open.map(x=>Math.max(0,num(x.target)/100*future-x.value)),needTotal=needs.reduce((a,b)=>a+b,0),openTarget=open.reduce((a,x)=>a+num(x.target),0),amount={};
-  open.forEach((x,i)=>amount[x.ticker]=needTotal?needs[i]/needTotal*budget:(openTarget?num(x.target)/openTarget*budget:0));
+  const rows=(Array.isArray(h)?h:monthlyConfigs().map(itemData)).filter(x=>(x.useMode||'monthly')==='monthly'&&num(x.target)>0);
+  const month=viewMonth(),budget=num(q('rebalancePay')?.value)||num(state.nextPay);
+  const thisMonthTrades=(state.trades||[]).filter(tx=>contributionMonth(tx)===month&&(tx.side||'buy')==='buy'&&num(tx.shares)>0);
+  const used=thisMonthTrades.reduce((acc,tx)=>acc+((num(tx.amount)||num(tx.price)*num(tx.shares))+num(tx.fee))*(num(tx.fx)||num(state.currentFx)||7.83),0);
+  const available=Math.max(0,budget-used);
+  const done=rows.map(x=>{
+    const autoDone=thisMonthTrades.some(tx=>String(tx.ticker).trim().toUpperCase()===String(x.ticker).trim().toUpperCase());
+    const manualDone=state.monthlyCompleted?.[month+':'+x.ticker]===true;
+    return autoDone||manualDone;
+  });
+  const current=rows.reduce((a,x)=>a+x.value,0);
+  const future=current+available;
+  const open=rows.filter((x,i)=>!done[i]);
+  const needs=open.map(x=>Math.max(0,num(x.target)/100*future-x.value));
+  const needSum=needs.reduce((a,b)=>a+b,0);
+  const openTarget=open.reduce((a,x)=>a+num(x.target),0);
+  const amount={};
+  open.forEach((x,i)=>amount[x.ticker]=needSum?needs[i]/needSum*available:(openTarget?num(x.target)/openTarget*available:0));
+
   const box=q('rebalanceResult');if(!box)return;
   box.className='dynamic-result-grid';
   const isFrac=q('fractional')?.value==='yes';
   let totalEstimatedFees=0;
   const calculations={};
+
   box.innerHTML=rows.map((x,i)=>{
     const xDone=done[i],money=xDone?0:num(amount[x.ticker]),unit=x.price*(num(state.currentFx)||7.83);
     let qty=0,f={total:0,mode:'--'};
@@ -1359,11 +1377,41 @@ function buyOnly(h){
     calculations[x.ticker]={qty,f,actualHKD,feeHKD};
     return `<div class="${xDone?'completed-card':''}" style="display:flex;flex-direction:column;position:relative;"><span class="dynamic-category">${esc(x.category||x.group||x.ticker)}</span><small style="display:block;margin-top:4px">${esc(x.ticker)}</small>${xDone?'<span class="commit-done">✓ 本月買入完成</span>':''}<strong>${fmt(xDone?0:actualHKD)}</strong><small data-sensitive style="display:block;color:var(--muted);margin-bottom:6px">連估算費用共 ${fmt(xDone?0:(actualHKD+feeHKD))}</small><span>${xDone?'0股':x.price?qty.toFixed(isFrac?6:0)+'股':'請先輸入現價'}</span><small data-sensitive style="display:block;color:var(--muted);margin-top:2px">估算費用 US$${xDone?'0.00':f.total.toFixed(2)} · ${xDone?'--':f.mode}</small><label class="complete-toggle" style="margin-top:auto;padding-top:12px;cursor:pointer;"><input type="checkbox" data-complete-dyn="${esc(x.ticker)}" ${xDone?'checked':''}> 本月買入完成</label>${xDone?'':`<button class="btn light prefill-btn" style="margin-top:10px;width:100%" data-prefill="${esc(x.ticker)}">預填交易</button>`}</div>`;
   }).join('')||'<div class="dynamic-empty">目前未有「參與月供」且目標大於 0% 的 ETF。</div>';
-  box.querySelectorAll('[data-complete-dyn]').forEach(cb=>{cb.onchange=e=>{state.monthlyCompleted=state.monthlyCompleted||{};state.monthlyCompleted[month+':'+e.target.dataset.completeDyn]=e.target.checked;save();window.CommitFinalUI?.refresh?.()}});
-  box.querySelectorAll('[data-prefill]').forEach(btn=>{btn.onclick=()=>{const x=rows.find(v=>v.ticker===btn.dataset.prefill);if(!x)return;const calc=calculations[x.ticker]||{qty:0,f:{total:0}};if(q('ticker'))q('ticker').value=x.ticker;if(q('price'))q('price').value=x.price||'';if(q('shares'))q('shares').value=x.price?calc.qty.toFixed(6):'';if(q('tradeDate'))q('tradeDate').value=new Date().toISOString().slice(0,10);if(q('contributionMonth'))q('contributionMonth').value=month;if(q('type'))q('type').value='正常月供';if(q('fee')&&x.price&&calc.qty){q('fee').value=num(calc.f.total).toFixed(2);if(q('feeMode'))q('feeMode').value='auto'}if(typeof showPage==='function')showPage('trade');['price','shares','ticker','fee'].forEach(id=>q(id)?.dispatchEvent(new Event('input',{bubbles:true})))}});
-  if(q('rebalanceAfter')){const invested=rows.reduce((a,x)=>a+(done[rows.indexOf(x)]?0:num(amount[x.ticker])),0),postTotal=current+invested;q('rebalanceAfter').className='dynamic-post-grid';q('rebalanceAfter').innerHTML=rows.map((x,i)=>`<div><small>供款後 ${esc(x.ticker)}</small><strong>${(postTotal?100*(x.value+(done[i]?0:num(amount[x.ticker])))/postTotal:0).toFixed(1)}%</strong><span>目標 ${num(x.target)}%</span></div>`).join('')}
+
+  box.querySelectorAll('[data-complete-dyn]').forEach(cb=>{
+    cb.onchange=e=>{
+      state.monthlyCompleted=state.monthlyCompleted||{};
+      state.monthlyCompleted[month+':'+e.target.dataset.completeDyn]=e.target.checked;
+      save();window.CommitFinalUI?.refresh?.();
+    };
+  });
+
+  box.querySelectorAll('[data-prefill]').forEach(btn=>{
+    btn.onclick=()=>{
+      const x=rows.find(v=>v.ticker===btn.dataset.prefill);if(!x)return;
+      const calc=calculations[x.ticker]||{qty:0,f:{total:0}};
+      if(q('ticker'))q('ticker').value=x.ticker;
+      if(q('price'))q('price').value=x.price||'';
+      if(q('shares'))q('shares').value=x.price?calc.qty.toFixed(6):'';
+      if(q('tradeDate'))q('tradeDate').value=new Date().toISOString().slice(0,10);
+      if(q('contributionMonth'))q('contributionMonth').value=month;
+      if(q('type'))q('type').value='正常月供';
+      if(q('fee')&&x.price&&calc.qty){q('fee').value=num(calc.f.total).toFixed(2);if(q('feeMode'))q('feeMode').value='auto';}
+      if(typeof showPage==='function')showPage('trade');
+      ['price','shares','ticker','fee'].forEach(id=>q(id)?.dispatchEvent(new Event('input',{bubbles:true})));
+    };
+  });
+
+  if(q('rebalanceAfter')){
+    const invested=rows.reduce((a,x,i)=>a+(done[i]?0:num(amount[x.ticker])),0);
+    const postTotal=current+invested;
+    q('rebalanceAfter').className='dynamic-post-grid';
+    q('rebalanceAfter').innerHTML=rows.map((x,i)=>`<div><small>供款後 ${esc(x.ticker)}</small><strong>${(postTotal?100*(x.value+(done[i]?0:num(amount[x.ticker])))/postTotal:0).toFixed(1)}%</strong><span>目標 ${num(x.target)}%</span></div>`).join('');
+  }
   if(q('priority'))q('priority').innerHTML=rows.map((x,i)=>`<div class="broker-block"><b>${esc(x.ticker)} · Buy-only</b><div>建議投入 ${fmt(done[i]?0:num(amount[x.ticker]))}</div></div>`).join('')||'<div class="empty-state">目前未有月供 ETF</div>';
-  if(q('rebalanceNote'))q('rebalanceNote').innerHTML=`未完成項目估算費用合計 US$${totalEstimatedFees.toFixed(2)}。正式記錄以成交單實際費用為準。<br><br>${month}｜預算 ${fmt(budget)}｜只顯示參與月供及目標大於 0% 的 ETF。`;
+  if(q('rebalanceNote'))q('rebalanceNote').innerHTML=`未完成項目估算費用合計 US$${totalEstimatedFees.toFixed(2)}。正式記錄以成交單實際費用為準。<br><br>${month}｜預算 ${fmt(budget)}，已投入 ${fmt(used)}，剩餘 ${fmt(available)}。<br>以上每項「連估算費用共」已控制於剩餘預算內；該供款月份已有相關標的交易時，會自動選取並將本月建議歸零。`;
+  const rebTitleSpan=q('rebalanceResult')?.closest('.card')?.previousElementSibling?.querySelector('span');
+  if(rebTitleSpan)rebTitleSpan.style.display='none';
 }
 function compactAllocation(h){const rows=Array.isArray(h)?h:monthlyConfigs().map(itemData),total=rows.reduce((a,x)=>a+x.value,0),box=q('allocationCompare');if(!box)return;box.innerHTML=rows.map(x=>{const pct=total?100*x.value/total:0,d=pct-num(x.target);return `<div class="allocation-card"><span class="dynamic-category">${esc(x.category||x.group||x.ticker)}</span><b>${esc(x.ticker)}</b><div class="numbers"><strong>目前 ${pct.toFixed(1)}%</strong><span>目標 ${num(x.target).toFixed(1)}%</span></div><div class="variance ${d>=0?'positive':'negative'}">${d>=0?'+':''}${d.toFixed(1)}%</div></div>`}).join('')}
 function refreshCommitUI(){const h=monthlyConfigs().map(itemData);renderHero(h);buyOnly(h);compactAllocation(h)}
