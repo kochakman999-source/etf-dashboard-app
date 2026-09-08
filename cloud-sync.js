@@ -2,8 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import {
     getAuth,
     GoogleAuthProvider,
-    signInWithRedirect,
-    getRedirectResult,
+    signInWithPopup,
     signOut,
     onAuthStateChanged,
     setPersistence,
@@ -33,17 +32,6 @@ const cloudInfo = document.getElementById('cloudInfo');
 
 // 1. 強制鎖死本地登入狀態
 setPersistence(auth, browserLocalPersistence).catch(console.error);
-
-// 接收 Google Redirect 返回結果。登入狀態及資料同步仍由 onAuthStateChanged 統一處理。
-getRedirectResult(auth).then((result) => {
-    if (result?.user) {
-        if (cloudInfo) cloudInfo.textContent = `Google 登入成功：${result.user.email || "已驗證帳戶"}`;
-    }
-}).catch((error) => {
-    console.error("Redirect Login Error:", error);
-    if (cloudInfo) cloudInfo.textContent = `登入失敗：${error.message}`;
-    if (loginBtn) loginBtn.disabled = false;
-});
 
 // 2. 監聽登入狀態改變
 onAuthStateChanged(auth, async (user) => {
@@ -125,20 +113,35 @@ async function uploadData(user, isAuto = false) {
     }
 }
 
-// 登入按鈕
-loginBtn?.addEventListener('click', async () => {
-    try {
-        if (cloudInfo) cloudInfo.textContent = '正在跳轉至 Google 登入...';
-        if (loginBtn) loginBtn.disabled = true;
-        await signInWithRedirect(auth, provider);
-    } catch (error) {
-        console.error("Login Error:", error);
-        if (cloudInfo) cloudInfo.textContent = `登入失敗：${error.message}`;
-        if (loginBtn) loginBtn.disabled = false;
-        alert(`登入發生錯誤：[${error.code}]\n${error.message}`);
-    }
-});
+// 登入按鈕：必須在原始 click 手勢內同步直接開啟 Popup。
+loginBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
 
+    // 回呼保持同步，並在原始點擊手勢內立即開啟登入視窗。
+    const loginPromise = signInWithPopup(auth, provider);
+
+    if (cloudInfo) cloudInfo.textContent = '正在打開登入視窗...';
+    if (loginBtn) loginBtn.disabled = true;
+
+    loginPromise
+        .then((result) => {
+            if (cloudInfo) cloudInfo.textContent = `登入成功：${result.user.email || "已驗證帳戶"}`;
+            if (loginBtn) loginBtn.disabled = false;
+            // 雲端資料由 onAuthStateChanged 統一拉取，避免重複下載。
+        })
+        .catch((error) => {
+            console.error("Login Error:", error);
+
+            if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+                alert("登入視窗被 Safari 阻擋或不小心關閉了。\n\n請重試，並在系統詢問時點擊「允許」。登入期間請勿手動切換分頁。");
+            } else {
+                alert(`登入失敗：${error.message}`);
+            }
+
+            if (cloudInfo) cloudInfo.textContent = '同步狀態：尚未登入';
+            if (loginBtn) loginBtn.disabled = false;
+        });
+});
 // 登出按鈕
 logoutBtn?.addEventListener('click', async () => {
     try {
