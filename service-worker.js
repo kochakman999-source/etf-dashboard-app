@@ -1,4 +1,4 @@
-const CACHE_NAME = 'etf-portfolio-safari-login-v22';
+const CACHE_NAME = 'etf-portfolio-safari-login-v23';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
