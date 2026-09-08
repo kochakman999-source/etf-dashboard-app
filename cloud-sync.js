@@ -2,7 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import {
     getAuth,
     GoogleAuthProvider,
-    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
     signOut,
     onAuthStateChanged,
     setPersistence,
@@ -32,6 +33,17 @@ const cloudInfo = document.getElementById('cloudInfo');
 
 // 1. 強制鎖死本地登入狀態
 setPersistence(auth, browserLocalPersistence).catch(console.error);
+
+// 接收 Google Redirect 返回結果。登入狀態及資料同步仍由 onAuthStateChanged 統一處理。
+getRedirectResult(auth).then((result) => {
+    if (result?.user) {
+        if (cloudInfo) cloudInfo.textContent = `Google 登入成功：${result.user.email || "已驗證帳戶"}`;
+    }
+}).catch((error) => {
+    console.error("Redirect Login Error:", error);
+    if (cloudInfo) cloudInfo.textContent = `登入失敗：${error.message}`;
+    if (loginBtn) loginBtn.disabled = false;
+});
 
 // 2. 監聽登入狀態改變
 onAuthStateChanged(auth, async (user) => {
@@ -116,11 +128,13 @@ async function uploadData(user, isAuto = false) {
 // 登入按鈕
 loginBtn?.addEventListener('click', async () => {
     try {
-        if (cloudInfo) cloudInfo.textContent = '正在開啟 Google 登入...';
-        await signInWithPopup(auth, provider);
+        if (cloudInfo) cloudInfo.textContent = '正在跳轉至 Google 登入...';
+        if (loginBtn) loginBtn.disabled = true;
+        await signInWithRedirect(auth, provider);
     } catch (error) {
         console.error("Login Error:", error);
         if (cloudInfo) cloudInfo.textContent = `登入失敗：${error.message}`;
+        if (loginBtn) loginBtn.disabled = false;
         alert(`登入發生錯誤：[${error.code}]\n${error.message}`);
     }
 });
