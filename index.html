@@ -371,7 +371,13 @@ function buildAdditiveUI(){
  const strategyCard=document.querySelector('#strategyModal .card');if(strategyCard&&!document.getElementById('transitionProgress'))strategyCard.insertAdjacentHTML('beforeend','<div class="section-title"><h3>策略轉換進度</h3><span>目前配置 → 現行目標</span></div><div class="transition-grid" id="legacyTransitionProgress"></div>');
  const rr=document.getElementById('rebalanceResult');if(rr&&!document.getElementById('rebalanceFeeNote'))rr.insertAdjacentHTML('afterend','<div id="rebalanceFeeNote" style="font-size:12px;color:var(--muted);margin-top:10px"></div>');
 }
-function updateFeeUI(){const f=feeEstimate(+price.value||0,+shares.value||0);if(window.feeMode&&feeMode.value==='auto'){fee.value=f.total.toFixed(2);fee.dataset.source='estimated'}else if(window.fee){fee.dataset.source='actual'};if(window.feeCommission){feeCommission.textContent='US$'+f.commission.toFixed(2);feePlatform.textContent='US$'+f.platform.toFixed(2);feeSettlement.textContent='US$'+f.settlement.toFixed(2);feeModeLabel.textContent=f.mode;feeHelp.textContent=f.mode==='碎股'?'少於1股：免佣金；平台費為交易金額0.99%，最低US$0.01、最高US$0.99。':'1股或以上：佣金每股US$0.0049（最低US$0.99）＋平台費每股US$0.005（最低US$1）＋交收費每股US$0.003。'}preview()}
+function updateFeeUI(){
+  if(window.ETFThreeBrokerFinal&&typeof window.ETFThreeBrokerFinal.refresh==='function'){
+    window.ETFThreeBrokerFinal.refresh();
+  }else if(typeof preview==='function'){
+    preview();
+  }
+}
 function renderMonthBudget(){if(!window.budgetMonth)return;const m=budgetMonth.value||new Date().toISOString().slice(0,7),budget=+(state.monthlyBudgets[m]??state.nextPay??7000),z=monthStats(m);monthBudgetInput.value=budget;mbTotal.textContent=fmt(budget);mbEarly.textContent=fmt(z.early);mbUsed.textContent=fmt(z.used);mbRemain.textContent=fmt(z.remain)}
 function renderFilteredTrades(){if(!window.filterTicker)return;const q=filterText.value.trim().toLowerCase(),m=filterMonth.value,t=filterTicker.value;let list=state.trades.map((x,i)=>({x,i})).filter(o=>(!t||o.x.ticker===t)&&(!m||contributionOf(o.x)===m)&&(!q||JSON.stringify(o.x).toLowerCase().includes(q)));filterSummary.textContent=`篩選結果：${list.length}筆｜港元成本 ${fmt(list.reduce((a,o)=>a+txHkd(o.x),0))}｜費用 US$${list.reduce((a,o)=>a+(+o.x.fee||0),0).toFixed(2)}`;tradeRows.innerHTML=list.length?list.slice().reverse().map(o=>{const x=o.x;return `<tr><td>${x.date}<br><small>供款：${contributionOf(x)}</small></td><td><b>${x.ticker}</b></td><td data-sensitive>US$${x.price.toFixed(2)}</td><td data-sensitive>${x.shares.toFixed(6)}</td><td data-sensitive>US$${(+x.fee||0).toFixed(2)}<br><span class="${x.feeSource==='estimated'?'fee-estimated':'fee-actual'}">${x.feeSource==='estimated'?'估算':'實際'}</span></td><td data-sensitive>${fmt(txHkd(x))}</td><td>${x.type}</td><td><div class="toolbar"><button class="btn light" data-edit="${o.i}">修改</button><button class="btn red" data-del="${o.i}">刪除</button></div></td></tr>`}).join(''):'<tr><td colspan="8" class="empty-state">沒有符合條件嘅交易</td></tr>';document.querySelectorAll('[data-del]').forEach(e=>e.onclick=()=>{if(confirm('確定刪除呢筆交易？')){state.trades.splice(+e.dataset.del,1);save();render()}});document.querySelectorAll('[data-edit]').forEach(e=>e.onclick=()=>startEdit(+e.dataset.edit))}
 function renderMonthlyCompare(){if(!window.monthlyCompareGrid)return;const a=[...(state.snapshots||[])].sort((x,y)=>x.month.localeCompare(y.month));if(a.length<2){monthlyCompareGrid.innerHTML='<div class="addon-card"><small>尚未有足夠資料</small><strong>最少需要兩個月快照</strong></div>';return}const cur=a[a.length-1],prev=a[a.length-2],change=cur.total-prev.total,net=change-(cur.contribution||0);monthlyCompareGrid.innerHTML=`<div class="addon-card"><small>${prev.month}總資產</small><strong data-sensitive>${fmt(prev.total)}</strong></div><div class="addon-card"><small>${cur.month}總資產</small><strong data-sensitive>${fmt(cur.total)}</strong></div><div class="addon-card"><small>總資產變動</small><strong data-sensitive>${change>=0?'+':''}${fmt(change)}</strong></div><div class="addon-card"><small>扣除投入後變動</small><strong data-sensitive>${net>=0?'+':''}${fmt(net)}</strong></div>`}
@@ -1200,9 +1206,33 @@ function feeEstimate(){const broker=q('tradeBrokerFinal')?.value||'futu',mode=q(
  if(broker==='webull'){note='Webull 香港：佣金及平台費預設 US$0；最終以成交單為準。'}
  else if(broker==='ibkr'){if(mode==='fixed'){total=qty?Math.min(Math.max(1,qty*.005),Math.max(.01,value*.01)):0;note='IBKR Fixed：US$0.005／股，最低 US$1；最終以成交單為準。'}else{total=qty?Math.min(Math.max(.35,qty*.0035),Math.max(.01,value*.01)):0;note='IBKR Tiered：基本佣金 US$0.0035／股，最低 US$0.35；另有第三方費用，以成交單為準。'}}
  else{note='富途證券：請按成交單在「總交易費用 USD」輸入實際總費用。'}return{broker,mode,total,note}}
-function refresh(){if(!ensure())return;const z=feeEstimate(),field=q('brokerModeFieldFinal'),feeMode=q('feeMode'),fee=q('fee');field.style.display=z.broker==='ibkr'?'block':'none';
- if(z.broker==='futu'){if(feeMode)feeMode.value='manual'}else if(feeMode?.value!=='manual'&&fee){fee.value=z.total.toFixed(2);fee.dispatchEvent(new Event('input',{bubbles:true}))}
- const help=q('feeHelp');if(help)help.textContent=z.note}
+function refresh(){
+ if(!ensure())return;
+ const z=feeEstimate(),field=q('brokerModeFieldFinal'),feeMode=q('feeMode'),fee=q('fee');
+ if(field)field.style.display=z.broker==='ibkr'?'block':'none';
+ const commission=q('feeCommission'),platform=q('feePlatform'),settlement=q('feeSettlement'),modeLabel=q('feeModeLabel'),help=q('feeHelp');
+ let commissionValue=0,platformValue=0,settlementValue=0,label='手動';
+ if(z.broker==='webull'){
+   if(feeMode)feeMode.value='auto';
+   if(fee){fee.value='0.00';fee.dataset.source='estimated';}
+   label='Webull 自動';
+ }else if(z.broker==='ibkr'){
+   if(feeMode)feeMode.value='auto';
+   if(fee){fee.value=z.total.toFixed(2);fee.dataset.source='estimated';}
+   commissionValue=z.total;
+   label=z.mode==='tiered'?'IBKR Tiered':'IBKR Fixed';
+ }else{
+   if(feeMode)feeMode.value='manual';
+   if(fee)fee.dataset.source='actual';
+   label='富途手動';
+ }
+ if(commission)commission.textContent='US$'+commissionValue.toFixed(2);
+ if(platform)platform.textContent='US$'+platformValue.toFixed(2);
+ if(settlement)settlement.textContent='US$'+settlementValue.toFixed(2);
+ if(modeLabel)modeLabel.textContent=label;
+ if(help)help.textContent=z.note;
+ if(typeof preview==='function')preview();
+}
 function capture(){const broker=q('tradeBrokerFinal')?.value||'futu',mode=broker==='ibkr'?(q('ibkrPricingFinal')?.value||'fixed'):'';setTimeout(()=>{const tx=(state.trades||[])[state.trades.length-1];if(!tx)return;tx.broker=broker;tx.brokerMode=mode;localStorage.setItem(KEY,JSON.stringify(state));rows()},40)}
 function rows(){document.querySelectorAll('#tradeRows tr').forEach(row=>{const edit=row.querySelector('[data-edit]');if(!edit)return;const tx=state.trades?.[N(edit.dataset.edit)],cell=row.querySelectorAll('td')[1];if(!tx||!cell)return;cell.querySelectorAll('.broker-chip-final').forEach(x=>x.remove());const label=brokerNames[tx.broker]||'未記錄券商',mode=tx.broker==='ibkr'&&tx.brokerMode?' · '+(tx.brokerMode==='tiered'?'Tiered':'Fixed'):'';cell.insertAdjacentHTML('beforeend','<br><span class="broker-chip-final">'+label+mode+'</span>')})}
 function editLoad(e){const b=e.target.closest('[data-edit]');if(!b)return;setTimeout(()=>{const tx=state.trades?.[N(b.dataset.edit)];if(!tx)return;ensure();q('tradeBrokerFinal').value=['futu','webull','ibkr'].includes(tx.broker)?tx.broker:'futu';q('ibkrPricingFinal').value=tx.brokerMode==='tiered'?'tiered':'fixed';refresh()},0)}
