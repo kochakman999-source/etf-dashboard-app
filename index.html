@@ -1332,15 +1332,15 @@ function buyOnly(h){
     q('rebalanceAfter').innerHTML=rows.map((x,i)=>`<div><small>供款後 ${esc(x.ticker)}</small><strong>${(postTotal?100*(x.value+(done[i]?0:num(amount[x.ticker])))/postTotal:0).toFixed(1)}%</strong><span>目標 ${num(x.target)}%</span></div>`).join('');
   }
   if(q('priority')){
-    const validResults=rows.map((x,i)=>({ticker:x.ticker,amt:done[i]?0:num(amount[x.ticker])})).filter(x=>x.amt>0);
-    const actionBox=q('priority').closest('.actionbox');
-    if(validResults.length>0){
-      q('priority').innerHTML=`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">`+validResults.map(a=>`<div style="background:#fff;border:1px solid #bfdbfe;padding:8px 12px;border-radius:10px;box-shadow:0 2px 8px rgba(59,130,246,0.06);display:flex;align-items:baseline;gap:6px;"><b style="color:#1d4ed8;font-size:15px;">${esc(a.ticker)}</b><span style="font-weight:750;font-size:14px;color:#0f172a;">HK$${Math.round(a.amt).toLocaleString()}</span></div>`).join('')+`</div>`;
-      if(actionBox){actionBox.style.background='transparent';actionBox.style.border='none';actionBox.style.padding='0 0 10px 0';}
+    const openItems=rows.map((x,i)=>({ticker:x.ticker,actual:done[i]?0:num(amount[x.ticker])})).filter(x=>x.actual>0);
+    const priorityEl=q('priority');
+    const actionBox=priorityEl.closest('.actionbox');
+    if(openItems.length>0){
+      priorityEl.innerHTML=`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">`+openItems.map(a=>`<div style="background:#fff;border:1px solid #bfdbfe;padding:8px 12px;border-radius:10px;box-shadow:0 2px 8px rgba(59,130,246,0.06);display:flex;align-items:baseline;gap:6px;"><b style="color:#1d4ed8;font-size:15px;">${esc(a.ticker)}</b><span style="font-weight:750;font-size:14px;color:#0f172a;">HK$${Math.round(a.actual).toLocaleString()}</span></div>`).join('')+`</div>`;
     }else{
-      q('priority').innerHTML='<div style="color:var(--muted);font-size:13px;padding:8px 0;">目前無需投入，或本月已完成買入。</div>';
-      if(actionBox){actionBox.style.background='transparent';actionBox.style.border='none';actionBox.style.padding='0 0 10px 0';}
+      priorityEl.innerHTML='<div style="color:var(--muted);font-size:13px;padding:8px 0;">本月買入已全部完成。</div>';
     }
+    if(actionBox){actionBox.style.background='transparent';actionBox.style.border='none';actionBox.style.padding='0 0 10px 0';}
   }
   if(q('rebalanceNote'))q('rebalanceNote').innerHTML=`未完成項目估算費用合計 US$${totalEstimatedFees.toFixed(2)}。正式記錄以成交單實際費用為準。<br><br>${month}｜預算 ${fmt(budget)}，已投入 ${fmt(used)}，剩餘 ${fmt(available)}。<br>以上每項「連估算費用共」已控制於剩餘預算內；該供款月份已有相關標的交易時，會自動選取並將本月建議歸零。`;
   const rebTitleSpan=q('rebalanceResult')?.closest('.card')?.previousElementSibling?.querySelector('span');
@@ -1364,6 +1364,24 @@ if(document.readyState==='complete'){
 }else{
   window.addEventListener('load',refreshCommitUI,{once:true});
 }
+
+// ACTION_ADVICE_RENDER_HOOK_START
+const prevRenderCommitUI=window.render;
+let commitUIRefreshQueued=false;
+let commitUIRefreshRunning=false;
+window.render=function(){
+  const result=typeof prevRenderCommitUI==='function'?prevRenderCommitUI.apply(this,arguments):undefined;
+  if(!commitUIRefreshRunning&&!commitUIRefreshQueued){
+    commitUIRefreshQueued=true;
+    setTimeout(()=>{
+      commitUIRefreshQueued=false;
+      commitUIRefreshRunning=true;
+      try{refreshCommitUI()}finally{commitUIRefreshRunning=false}
+    },0);
+  }
+  return result;
+};
+// ACTION_ADVICE_RENDER_HOOK_END
 })();
 </script>
 
