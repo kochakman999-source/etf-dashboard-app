@@ -1,0 +1,73 @@
+{
+  "A": {
+    "blocked": true,
+    "targetTotal": 5,
+    "unallocated": 7000,
+    "warnings": [
+      "月供目標合計為 5.0%，尚有 95.0% 未配置。請先將所有月供組別目標調整至 100%。"
+    ],
+    "pass": true
+  },
+  "B": {
+    "guide": true,
+    "buyItems": 1,
+    "prefill": true,
+    "pass": true
+  },
+  "C": {
+    "primary": "VT",
+    "flags": [
+      [
+        "VT",
+        true
+      ],
+      [
+        "HOLD",
+        false
+      ]
+    ],
+    "pass": true
+  },
+  "D": {
+    "deleteButton": true,
+    "stillExists": true,
+    "pass": true
+  },
+  "E": {
+    "depositAfter": 20123.45,
+    "depositReversed": 20000,
+    "exchangeMid": {
+      "h": 19218,
+      "u": 2100
+    },
+    "exchangeFinal": {
+      "h": 20000,
+      "u": 2000
+    },
+    "pass": true
+  },
+  "F": {
+    "tradeCount": 1,
+    "pass": true
+  },
+  "brokerClosure": {
+    "broker": "futu",
+    "feePlan": "standard",
+    "estimatedFee": 1.99,
+    "pass": true
+  },
+  "static": {
+    "scriptSrc": 0,
+    "links": 0,
+    "input16": true,
+    "checkbox": true,
+    "userSelect": true,
+    "safeBottom": true,
+    "smoothScroll": false,
+    "legacyTickers": false,
+    "mainBuy": false,
+    "pass": true
+  },
+  "errors": [],
+  "pass": true
+}

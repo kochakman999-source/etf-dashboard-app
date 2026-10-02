@@ -1,0 +1,1689 @@
+{
+  "buttonFamilies": [
+    {
+      "name": "總覽",
+      "selector": "button[data-page=\"home\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "持倉",
+      "selector": "button[data-page=\"portfolio\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "交易",
+      "selector": "button[data-page=\"trade\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "現金儲備",
+      "selector": "button[data-page=\"cash\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資產試算",
+      "selector": "button[data-page=\"projection\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "月結紀錄",
+      "selector": "button[data-page=\"monthly\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "績效分析",
+      "selector": "button[data-page=\"performance\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "股息與賣出",
+      "selector": "button[data-page=\"income\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資金目標",
+      "selector": "button[data-page=\"goals\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資料中心",
+      "selector": "button[data-page=\"dataCenter\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "專業分析",
+      "selector": "button[data-page=\"phase3Analysis\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資料品質",
+      "selector": "button[data-page=\"phase4Data\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "進階分析",
+      "selector": "button[data-page=\"phase5Advanced\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "驗收中心",
+      "selector": "button[data-page=\"phase6QA\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "雲端驗收",
+      "selector": "button[data-page=\"phase7Cloud\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "發布完整性",
+      "selector": "button[data-page=\"phase8Release\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "Google 登入",
+      "selector": "button[id=\"googleSignInBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "隱藏金額",
+      "selector": "button[id=\"privacyBtn\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "深色模式",
+      "selector": "button[id=\"themeBtn\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "⚙ ETF設定",
+      "selector": "button[data-action=\"open-etf\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "modal DOM",
+      "redraw": "renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "簡潔顯示",
+      "selector": "button[id=\"holdingsViewToggle\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "更新市場價格",
+      "selector": "button[data-action=\"prices\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation only",
+      "redraw": "showPage/openETFManager",
+      "status": "PASS"
+    },
+    {
+      "name": "＋ 買入 ETF 記錄買入及所選資金來源扣款",
+      "selector": "button[data-trade-side=\"buy\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "↗ 賣出 ETF 檢查持倉並將淨收入存入所選戶口",
+      "selector": "button[data-trade-side=\"sell\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "確認儲存交易",
+      "selector": "button[data-action=\"save-trade\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.trades[]; state.cashTx[]; state.cash.*",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "取消修改",
+      "selector": "button[data-action=\"cancel-trade\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "editingTrade; form DOM",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出JSON備份",
+      "selector": "button[data-action=\"export-json\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "safeStorage backup + download",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "交易CSV",
+      "selector": "button[data-action=\"trades-csv\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "持倉CSV",
+      "selector": "button[data-action=\"holdings-csv\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "自動補算0費用交易",
+      "selector": "button[data-action=\"fill-fees\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.trades[].fee; state.cash.usdCash; cashTx.detail",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "↓ 存入現金寶",
+      "selector": "button[data-cash-mode=\"deposit\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "↑ 提取現金寶",
+      "selector": "button[data-cash-mode=\"withdraw\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "確認儲存現金交易",
+      "selector": "button[data-action=\"save-cash\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.cash[account]; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "確認兌換並儲存",
+      "selector": "button[data-action=\"exchange\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.cash.hkdCash/usdCash; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "儲存本月快照",
+      "selector": "button[data-action=\"snapshot\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.snapshots[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出月結CSV",
+      "selector": "button[data-action=\"snap-csv\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "儲存股息",
+      "selector": "button[data-action=\"dividend\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.dividends[]; state.cash.usdCash; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "試算",
+      "selector": "button[data-action=\"sell-preview\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "sellResult DOM only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "新增目標",
+      "selector": "button[data-action=\"goal\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.goals[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "確認匯入",
+      "selector": "button[data-action=\"commit-csv\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.trades[]; state.cash.*; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "還原CSV匯入前資料",
+      "selector": "button[data-action=\"restore-csv\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state root",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出操作歷史",
+      "selector": "button[data-action=\"audit-csv\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "上載雲端",
+      "selector": "button[id=\"cloudUploadBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "下載比較",
+      "selector": "button[id=\"cloudDownloadBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "登出",
+      "selector": "button[id=\"googleSignOutBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "儲存設定",
+      "selector": "button[id=\"saveFirebaseConfigBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "儲存設定",
+      "selector": "button[id=\"saveMarketApiBtn\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "測試連線",
+      "selector": "button[id=\"testMarketApiBtn\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "立即更新全部 ETF",
+      "selector": "button[id=\"updateMarketNowBtn\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "安裝 App",
+      "selector": "button[id=\"installPwaBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "檢查更新",
+      "selector": "button[id=\"checkUpdateBtn\"]",
+      "line": "-",
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "停用，非可點擊"
+    },
+    {
+      "name": "匯入成分",
+      "selector": "button[data-action=\"components\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.components[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "封存ETF",
+      "selector": "button[data-action=\"archive\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.etfs[].archived; primaryTicker",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "解封ETF",
+      "selector": "button[data-action=\"restore-etf\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.etfs[].archived; primaryTicker",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出Schema v9備份",
+      "selector": "button[data-action=\"schema-backup\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "比較紀錄數量",
+      "selector": "button[data-action=\"compare-backup\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "comparedBackup read-only",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "套用已比較備份",
+      "selector": "button[data-action=\"apply-backup\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state root",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "重新檢查",
+      "selector": "button[data-action=\"qa\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "read-only diagnostic",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出診斷JSON",
+      "selector": "button[data-action=\"qa-export\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "還原雲端下載前備份",
+      "selector": "button[data-action=\"restore-cloud\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state root",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "讀取並比較",
+      "selector": "button[data-action=\"cloud-compare\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "candidate",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "模擬重複合併",
+      "selector": "button[data-action=\"merge-test\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "mergeRows DOM",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "套用安全合併",
+      "selector": "button[data-action=\"apply-merge\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state root",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出P7驗收報告",
+      "selector": "button[data-action=\"cloud-report\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "重新檢查",
+      "selector": "button[data-action=\"release-check\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "read-only diagnostic",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "匯出Runtime Manifest",
+      "selector": "button[data-action=\"manifest\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "download only",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "••• 更多",
+      "selector": "button[id=\"moreBtn\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "button[id=\"moreBackdrop\"]",
+      "selector": "button[id=\"moreBackdrop\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "×",
+      "selector": "button[id=\"moreClose\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "月結紀錄",
+      "selector": "button[data-more-page=\"monthly\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資產試算",
+      "selector": "button[data-more-page=\"projection\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "績效分析",
+      "selector": "button[data-more-page=\"performance\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "股息與賣出",
+      "selector": "button[data-more-page=\"income\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資金目標",
+      "selector": "button[data-more-page=\"goals\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資料中心",
+      "selector": "button[data-more-page=\"dataCenter\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "專業分析",
+      "selector": "button[data-more-page=\"phase3Analysis\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "資料品質",
+      "selector": "button[data-more-page=\"phase4Data\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "進階分析",
+      "selector": "button[data-more-page=\"phase5Advanced\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "驗收中心",
+      "selector": "button[data-more-page=\"phase6QA\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "雲端驗收",
+      "selector": "button[data-more-page=\"phase7Cloud\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "發布完整性",
+      "selector": "button[data-more-page=\"phase8Release\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "navigation/UI or dedicated ID handler",
+      "redraw": "showPage/renderApp or local UI",
+      "status": "PASS"
+    },
+    {
+      "name": "×",
+      "selector": "button[data-action=\"close-etf\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "modal DOM",
+      "redraw": "none",
+      "status": "PASS"
+    },
+    {
+      "name": "儲存組別",
+      "selector": "button[data-action=\"save-category\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.categories[]; state.etfs[].category",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "清除",
+      "selector": "button[data-action=\"clear-category\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "form DOM",
+      "redraw": "renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "儲存 ETF",
+      "selector": "button[data-action=\"save-etf\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "state.etfs[]; state.categories[].primaryTicker",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "清除",
+      "selector": "button[data-action=\"clear-etf\"]",
+      "line": 328,
+      "listener": 332,
+      "state": "form DOM",
+      "redraw": "renderManagerSelect",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-edit-trade]",
+      "selector": "[data-edit-trade]",
+      "line": 346,
+      "listener": 332,
+      "state": "editingTrade; trade form DOM",
+      "redraw": "showPage/renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-trade]",
+      "selector": "[data-delete-trade]",
+      "line": 346,
+      "listener": 332,
+      "state": "state.trades[]; state.cash.*; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-cash]",
+      "selector": "[data-delete-cash]",
+      "line": 347,
+      "listener": 332,
+      "state": "state.cash.*; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-dividend]",
+      "selector": "[data-delete-dividend]",
+      "line": 351,
+      "listener": 332,
+      "state": "state.dividends[]; state.cash.usdCash; state.cashTx[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-goal]",
+      "selector": "[data-delete-goal]",
+      "line": 352,
+      "listener": 332,
+      "state": "state.goals[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-goal-status]",
+      "selector": "[data-goal-status]",
+      "line": 352,
+      "listener": 332,
+      "state": "state.goals[].status",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-snapshot]",
+      "selector": "[data-delete-snapshot]",
+      "line": 349,
+      "listener": 332,
+      "state": "state.snapshots[]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-prefill]",
+      "selector": "[data-prefill]",
+      "line": 343,
+      "listener": 332,
+      "state": "trade form DOM",
+      "redraw": "showPage/renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-complete]",
+      "selector": "[data-complete]",
+      "line": 343,
+      "listener": 332,
+      "state": "state.monthlyCompleted[month]",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-edit-category]",
+      "selector": "[data-edit-category]",
+      "line": 401,
+      "listener": 332,
+      "state": "category form DOM",
+      "redraw": "renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-category]",
+      "selector": "[data-delete-category]",
+      "line": 401,
+      "listener": 332,
+      "state": "state.categories[]",
+      "redraw": "renderApp/renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-edit-etf]",
+      "selector": "[data-edit-etf]",
+      "line": 401,
+      "listener": 332,
+      "state": "ETF form DOM",
+      "redraw": "renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-toggle-archive]",
+      "selector": "[data-toggle-archive]",
+      "line": 401,
+      "listener": 332,
+      "state": "state.etfs[].archived; primaryTicker",
+      "redraw": "renderApp/renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-delete-etf]",
+      "selector": "[data-delete-etf]",
+      "line": 401,
+      "listener": 332,
+      "state": "state.etfs[]; state.components[]",
+      "redraw": "renderApp/renderManager",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-market-primary]",
+      "selector": "[data-market-primary]",
+      "line": 343,
+      "listener": 332,
+      "state": "state.categories[].primaryTicker",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-manual]",
+      "selector": "[data-manual]",
+      "line": 246,
+      "listener": 332,
+      "state": "state.manualQA.*",
+      "redraw": "renderApp",
+      "status": "PASS"
+    },
+    {
+      "name": "[data-cloud-check]",
+      "selector": "[data-cloud-check]",
+      "line": 246,
+      "listener": 332,
+      "state": "state.cloudQA.*",
+      "redraw": "renderApp",
+      "status": "PASS"
+    }
+  ],
+  "formControls": [
+    {
+      "id": "rebalancePay",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "settings.budget",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "fractional",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "currentFx",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "settings.fx",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "tradeDate",
+      "tag": "input",
+      "type": "date",
+      "line": 328,
+      "destination": "trades[].date",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "ticker",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "trades[].ticker",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "price",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "trades[].price",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "shares",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "trades[].shares",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "fx",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "trades[].fx",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "fee",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "trades[].fee",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "type",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "trades[].type",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "paymentSource",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "trades[].paymentSource",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "brokerSelect",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "trades[].broker",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "feePlanSelect",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "trades[].feePlan",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "feeCommission",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "衍生/唯讀",
+      "status": "PASS"
+    },
+    {
+      "id": "feePlatform",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "衍生/唯讀",
+      "status": "PASS"
+    },
+    {
+      "id": "feeEstimate",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "trades[].estimatedFee",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "note",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "trades[].note",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "importJson",
+      "tag": "input",
+      "type": "file",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "匯入暫存，確認後寫入",
+      "status": "PASS"
+    },
+    {
+      "id": "cashDateV49",
+      "tag": "input",
+      "type": "date",
+      "line": 328,
+      "destination": "cashTx[].date",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "cashTypeV49",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "cashTx[].type",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "cashCurrencyV49",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "cashTx[].account",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "cashAmountV49",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "cashTx[].amount + cash[account]",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "exchangeDateV49",
+      "tag": "input",
+      "type": "date",
+      "line": 328,
+      "destination": "cashTx[].date",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "exchangeDirectionV49",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "cashTx[].direction",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "exchangeAmountV49",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "cashTx[].amount + cash.*",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "exchangeRateV49",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "cashTx[].rate",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "exchangeFeeV49",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "cashTx[].fee",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "monthlyContribution",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "settings.projection.monthly",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "step",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "settings.projection.step",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "usdMonthly",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "settings.projection.usdMonthly",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "rate",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "settings.projection.rate",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "snapshotMonth",
+      "tag": "input",
+      "type": "month",
+      "line": 328,
+      "destination": "snapshots[].month",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "snapshotContribution",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "snapshots[].contribution",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "snapshotNote",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "snapshots[].note",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "divTicker",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "dividends[].ticker",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "divDate",
+      "tag": "input",
+      "type": "date",
+      "line": 328,
+      "destination": "dividends[].date",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "divGross",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "dividends[].gross",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "divTax",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "dividends[].tax",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "divFee",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "dividends[].fee",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "divFx",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "dividends[].fx",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "sellTicker",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "sellShares",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "sellPrice",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "sellFee",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "goalName",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "goals[].name",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "goalTarget",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "goals[].target",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "goalCurrentInput",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "goals[].current",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "goalDate",
+      "tag": "input",
+      "type": "date",
+      "line": 328,
+      "destination": "goals[].date",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "goalInvestable",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "goals[].investable",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "goalStatus",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "goals[].status",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "goalNotes",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "goals[].notes",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "brokerCsv",
+      "tag": "input",
+      "type": "file",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "匯入暫存，確認後寫入",
+      "status": "PASS"
+    },
+    {
+      "id": "firebaseConfigInput",
+      "tag": "textarea",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "停用的Hosted-only控制",
+      "status": "N/A"
+    },
+    {
+      "id": "marketApiProvider",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "marketApiKey",
+      "tag": "input",
+      "type": "password",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "marketAutoUpdate",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "languageSelect",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "停用的Hosted-only控制",
+      "status": "N/A"
+    },
+    {
+      "id": "pwaState",
+      "tag": "input",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "衍生/唯讀",
+      "status": "PASS"
+    },
+    {
+      "id": "p3Csv",
+      "tag": "textarea",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p4ArchiveTicker",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p4RestoreTicker",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p4BackupFile",
+      "tag": "input",
+      "type": "file",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "匯入暫存，確認後寫入",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Initial",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Years",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Monthly",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Step",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Inflation",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Conservative",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Base",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p5Optimistic",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "即時計算/畫面控制",
+      "status": "PASS"
+    },
+    {
+      "id": "p7CloudFile",
+      "tag": "input",
+      "type": "file",
+      "line": 328,
+      "destination": "無Save按鈕；只作即時計算、匯入候選或本機設定",
+      "kind": "匯入暫存，確認後寫入",
+      "status": "PASS"
+    },
+    {
+      "id": "catOriginal",
+      "tag": "input",
+      "type": "hidden",
+      "line": 328,
+      "destination": "edit key only",
+      "kind": "編輯暫存",
+      "status": "PASS"
+    },
+    {
+      "id": "catName",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "categories[].name",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "catTarget",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "categories[].targetPct",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfEditId",
+      "tag": "input",
+      "type": "hidden",
+      "line": 328,
+      "destination": "edit key only",
+      "kind": "編輯暫存",
+      "status": "PASS"
+    },
+    {
+      "id": "etfTicker",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "etfs[].ticker",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfName",
+      "tag": "input",
+      "type": "text",
+      "line": 328,
+      "destination": "etfs[].name",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfCategory",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "etfs[].category",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfMode",
+      "tag": "select",
+      "type": "",
+      "line": 328,
+      "destination": "etfs[].mode",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfPrice",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "etfs[].price",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfHigh",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "etfs[].high",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfLow",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "etfs[].low",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfExpense",
+      "tag": "input",
+      "type": "number",
+      "line": 328,
+      "destination": "etfs[].expense",
+      "kind": "持久化",
+      "status": "PASS"
+    },
+    {
+      "id": "etfPrimary",
+      "tag": "input",
+      "type": "checkbox",
+      "line": 328,
+      "destination": "categories[].primaryTicker",
+      "kind": "持久化",
+      "status": "PASS"
+    }
+  ]
+}
